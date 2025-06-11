@@ -1,4 +1,10 @@
-void setup(){
-}
-void draw(){
+abstract class GameObject{
+  protected PVector posicion;
+  protected PVector velocidad;
+ 
+  public GameObject(){
+  }
+  
+  abstract public void display();
+  abstract public void mover();
 }
