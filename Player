@@ -1,26 +1,17 @@
- class Jugador{
-  private PVector pos, posMouse;
-  private float diametro, radio;
-  
-  Jugador(){
-  pos = new PVector(width/2, height/2);
-  posMouse = new PVector(pmouseX, pmouseY);
-  diametro = 50;
-  radio = diametro/2;
-  
-  
+class Player extends GameObject{
+  public Player(PVector posicion){
+   this.posicion = posicion;
   }
-  public void dibujar(float posMouseX, float posMouseY){
-  ellipse(pos.x,pos.y,diametro,diametro);
-  fill(255);
-  line(pos.x,pos.y,posMouseX,posMouseY);
-  
-  
-  }
- public PVector getPos(){
-   return pos;
+public PVector getPosicionPlayer(){
+ return this.posicion;
+}
+
+ public void display(){
+   fill(0);
+   ellipse(this.posicion.x, this.posicion.y, 50,50);
+   
  }
-
-
-
+ public void mover(){
+ 
+ }
 }
