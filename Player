@@ -1,6 +1,7 @@
 class Player extends GameObject{
   public Player(PVector posicion){
    this.posicion = posicion;
+   this.velocidad = new PVector(2,2);
   }
 public PVector getPosicionPlayer(){
  return this.posicion;
@@ -9,9 +10,31 @@ public PVector getPosicionPlayer(){
  public void display(){
    fill(0);
    ellipse(this.posicion.x, this.posicion.y, 50,50);
-   
  }
  public void mover(){
+ }
+ 
+ public void mover(char direccion){
+  switch(direccion){
+    case 'u':{
+      this.posicion.y -= this.velocidad.y;
+      break;
+    }
+    case 'd':{
+      this.posicion.y += this.velocidad.y;
+      break;
+    }
+    case 'r':{
+      this.posicion.x += velocidad.x;
+      break;
+    }
+    case 'l':{
+      this.posicion.x -=velocidad.x;
+      break;
+      }
+  }
+  {
  
  }
+}
 }
