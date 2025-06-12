@@ -5,7 +5,7 @@ class BalaVomito extends Proyectil{
     this.posicion = posicion;
     this.direccion = PVector.sub(player, posicion);
     this.direccion.normalize();
-    this.direccion.mult(this.velocidad.x);
+    this.direccion.mult(this.velocidad);
     
   }
   public void mover(){
