@@ -1,24 +1,45 @@
-class Player extends GameObject {
-  private float velocidad;
-
-
-  public Player() {
-    this.posicion = new PVector(width/2, height/2);
-    this.velocidad = 5;
+class Player extends GameObject{
+  private char estado = 'b';
+  private PImage sprite;
+  public Player(PVector posicion){
+   this.posicion = posicion;
+   this.velocidad = 5;
+   this.sprite = loadImage("sprite.png").get(0,0,25,25);
   }
-  public PVector getPosicionPlayer() {
-    return this.posicion;
-  }
+public PVector getPosicionPlayer(){
+ return this.posicion;
+}
 
-  public void display() {
-    fill(0);
-    ellipse(this.posicion.x, this.posicion.y, 50, 50);
-  }
-  public void mover(){}
+ public void display(){
+   //fill(0);
+   //ellipse(this.posicion.x, this.posicion.y, 50,50);
+   switch(estado){
+     case 'a':{
+       this.sprite = loadImage("sprite.png").get(0,0,30,35);
+       image(this.sprite, this.posicion.x, this.posicion.y);
+       break;
+    
+     }
+     case 'b':{
+       this.sprite = loadImage("sprite.png").get(190,0,30,40);
+       image(this.sprite, this.posicion.x, this.posicion.y);
+        break;
+     }
+   }
+ }
+ public void mover(){
+ }
+ 
   public void moverJugador(boolean arriba, boolean abajo, boolean izquierda, boolean derecha) {
     if (arriba) posicion.y -= velocidad;
     if (abajo) posicion.y += velocidad;
-    if (izquierda) posicion.x += velocidad;
-    if (derecha) posicion.x -= velocidad;
+    if (izquierda){
+    posicion.x += velocidad;
+    this.estado = 'a';
+    }
+    if (derecha){
+      posicion.x -= velocidad;
+      this.estado = 'b';
   }
+}
 }
