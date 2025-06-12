@@ -1,6 +1,6 @@
-class BalaMoco extends Proyectil{
+class BalaVomito extends Proyectil{
   private float diametro = 10;
-  public BalaMoco(PVector Player, PVector posicion){
+  public BalaVomito(PVector Player, PVector posicion){
     super(Player);
     this.posicion = posicion;
     this.direccion = PVector.sub(Player, posicion);
