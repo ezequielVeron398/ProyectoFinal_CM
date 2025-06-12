@@ -1,15 +1,16 @@
 private Player player;
 private Enemigo enemigo;
+private Enemigo enemigoA;
 private boolean w, s, d, a;
 private int tiempoEntreBala;
-private ArrayList<Proyectil> balasJugador;
 private ArrayList<Proyectil> balasVomito;
 
 public void setup(){
   size(1000,1000);
   player = new Player(new PVector(width/2, height/2));
   enemigo = new Enemigo(new PVector(500,50));
-  balasJugador = new ArrayList<Proyectil>();
+  enemigoA = new Enemigo(new PVector(0,50));
+ // balasJugador = new ArrayList<Proyectil>();
   balasVomito =new ArrayList<Proyectil>();
   this.tiempoEntreBala = 0;
  
@@ -20,24 +21,19 @@ background(255);
  this.player.display();
  this.enemigo.display();
  this.enemigo.mover(player);
+ this.enemigoA.display();
+ this.enemigoA.mover(player);
+ this.player.visualizarBalas();
  
- //visuliza las balas del Jugador
- for (int i = balasJugador.size() - 1; i >= 0; i--) {
-    Proyectil bala = balasJugador.get(i);
-    bala.mover();
-    bala.display();
-    // elimna la bala si si llega o pasa el borde de la pantalla
-   if (bala.posicion.x < 0 || bala.posicion.x > width
-       || bala.posicion.y < 0 || bala.posicion.y > height){
-     balasJugador.remove(i);
-    }
-  }
+
+
   //agrega BalasMoco
   
   tiempoEntreBala++; // un cronometro para que la balaVotime tire cada medio segundo
   
   if(tiempoEntreBala >= 30){
     balasVomito.add(new BalaVomito(player.getPosicionPlayer(), enemigo.getPosicionEnemigo().copy()));
+    balasVomito.add(new BalaVomito(player.getPosicionPlayer(), enemigoA.getPosicionEnemigo().copy()));
     tiempoEntreBala = 0;
   }
   //visualiza  y elimina balaVomito
@@ -56,8 +52,10 @@ background(255);
 }
 
 public void mousePressed(){
- balasJugador.add(new BalaJugador(player.getPosicionPlayer().copy(), new PVector(mouseX, mouseY)));
+ player.generarBalas();
+
 }
+
 
 public void keyPressed() {
   if (key == 's' || key == 'S') s = true;
