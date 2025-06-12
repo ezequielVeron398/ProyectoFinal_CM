@@ -1,32 +1,55 @@
 
 private Player player;
-private boolean w, s, d, a;
-private ArrayList<Proyectil> balaJugador;
+private Enemigo enemigo;
+private boolean w, s, d,a;
+private ArrayList<Proyectil> balasJugador;
+private ArrayList<Proyectil> balasVomito;
 
-public void setup() {
-  size(600, 600);
-  player = new Player();
-  balaJugador = new ArrayList<Proyectil>();
+public void setup(){
+  size(1000,1000);
+  player = new Player(new PVector(width/2, height/2));
+  enemigo = new Enemigo(new PVector(500,50));
+  balasJugador = new ArrayList<Proyectil>();
+  balasVomito =new ArrayList<Proyectil>();
 }
 
-public void  draw() {
-  background(255);
-  this.player.display();
-  for (int i = balaJugador.size() - 1; i >= 0; i--) {
-    Proyectil bala = balaJugador.get(i);
+public void  draw(){
+background(255);
+ this.player.display();
+ this.enemigo.display();
+ this.enemigo.mover(player.posicion);
+ 
+ //visuliza las balas
+ for (int i = balasJugador.size() - 1; i >= 0; i--) {
+    Proyectil bala = balasJugador.get(i);
     bala.mover();
     bala.display();
-
-    if (bala.posicion.x < 0 || bala.posicion.x > width
-      || bala.posicion.y < 0 || bala.posicion.y > height) {
-      balaJugador.remove(i);
+    // elimna la bala si si llega o pasa el borde de la pantalla
+   if (bala.posicion.x < 0 || bala.posicion.x > width
+       || bala.posicion.y < 0 || bala.posicion.y > height){
+     balasJugador.remove(i);
+    }
+  }
+  //agrega BalasMoco
+  for(int i = 0; i < 1; i++){
+    balasVomito.add(new BalaVomito(player.getPosicionPlayer(), enemigo.getPosicionEnemigo().copy()));
+  }
+  //visualiza  y elimina balaVomito
+   for (int i = balasVomito.size() - 1; i >= 0; i--) {
+    Proyectil bala = balasVomito.get(i);
+    bala.mover();
+    bala.display();
+    
+   if (bala.posicion.x < 0 || bala.posicion.x > width
+       || bala.posicion.y < 0 || bala.posicion.y > height){
+     balasVomito.remove(i);
     }
   }
   player.moverJugador(w, s, d, a);
 }
 
-public void mousePressed() {
-  balaJugador.add(new BalaJugador(player.posicion.copy(), new PVector(mouseX, mouseY)));
+public void mousePressed(){
+ balasJugador.add(new BalaJugador(player.getPosicionPlayer().copy(), new PVector(mouseX, mouseY)));
 }
 
 public void keyPressed() {
