@@ -1,7 +1,7 @@
 abstract class Proyectil extends GameObject{
   protected PVector direccion;
-  public Proyectil(PVector posicion){
-      this.posicion = posicion.copy();
+  public Proyectil(){
+      
       this.velocidad = new PVector(10, 10);
   }
   
