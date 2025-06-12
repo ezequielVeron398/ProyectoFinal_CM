@@ -1,17 +1,24 @@
-class Player extends GameObject{
-  public Player(PVector posicion){
-   this.posicion = posicion;
-  }
-public PVector getPosicionPlayer(){
- return this.posicion;
-}
+class Player extends GameObject {
+  private float velocidad;
 
- public void display(){
-   fill(0);
-   ellipse(this.posicion.x, this.posicion.y, 50,50);
-   
- }
- public void mover(){
- 
- }
+
+  public Player() {
+    this.posicion = new PVector(width/2, height/2);
+    this.velocidad = 5;
+  }
+  public PVector getPosicionPlayer() {
+    return this.posicion;
+  }
+
+  public void display() {
+    fill(0);
+    ellipse(this.posicion.x, this.posicion.y, 50, 50);
+  }
+  public void mover(){}
+  public void moverJugador(boolean arriba, boolean abajo, boolean izquierda, boolean derecha) {
+    if (arriba) posicion.y -= velocidad;
+    if (abajo) posicion.y += velocidad;
+    if (izquierda) posicion.x += velocidad;
+    if (derecha) posicion.x -= velocidad;
+  }
 }
