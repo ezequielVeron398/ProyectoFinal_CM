@@ -5,7 +5,7 @@ class BalaJugador extends Proyectil{
      this.posicion = player;
      this.direccion = PVector.sub(objetivo, player);
      this.direccion.normalize();
-     this.direccion.mult(super.velocidad.x);
+     this.direccion.mult(super.velocidad);
      this.bala = loadImage("shoot.png").get(10,0,22,22);
      this.bala.resize(this.bala.width*2, this.bala.height*2);
   }
