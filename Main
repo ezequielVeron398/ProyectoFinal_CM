@@ -1,3 +1,5 @@
+private Player player;
+private Enemigo enemigo;
 private boolean w, s, d, a;
 private int tiempoEntreBala;
 private ArrayList<Proyectil> balasJugador;
@@ -24,6 +26,52 @@ background(255);
     Proyectil bala = balasJugador.get(i);
     bala.mover();
     bala.display();
+    // elimna la bala si si llega o pasa el borde de la pantalla
+   if (bala.posicion.x < 0 || bala.posicion.x > width
+       || bala.posicion.y < 0 || bala.posicion.y > height){
+     balasJugador.remove(i);
+    }
+  }
+  //agrega BalasMoco
+  
+  tiempoEntreBala++; // un cronometro para que la balaVotime tire cada medio segundo
+  
+  if(tiempoEntreBala >= 30){
+    balasVomito.add(new BalaVomito(player.getPosicionPlayer(), enemigo.getPosicionEnemigo().copy()));
+    tiempoEntreBala = 0;
+  }
+  //visualiza  y elimina balaVomito
+   for (int i = balasVomito.size() - 1; i >= 0; i--) {
+    Proyectil bala = balasVomito.get(i);
+    bala.mover();
+    bala.display();
+   
+   if (bala.posicion.x < 0 || bala.posicion.x > width
+       || bala.posicion.y < 0 || bala.posicion.y > height){
+     balasVomito.remove(i);
+    } 
+  }
+  
+  player.moverJugador(w, s, d, a);
+}
+
+public void mousePressed(){
+ balasJugador.add(new BalaJugador(player.getPosicionPlayer().copy(), new PVector(mouseX, mouseY)));
+}
+
+public void keyPressed() {
+  if (key == 's' || key == 'S') s = true;
+  if (key == 'w' || key == 'W') w = true;
+  if (key == 'a' || key == 'A') a = true;
+  if (key == 'd' || key == 'D') d = true;
+}
+
+public void keyReleased() {
+  if (key == 's' || key == 'S') s = false;
+  if (key == 'w' || key == 'W') w = false;
+  if (key == 'a' || key == 'A') a = false;
+  if (key == 'd' || key == 'D') d = false;
+}
     // elimna la bala si si llega o pasa el borde de la pantalla
    if (bala.posicion.x < 0 || bala.posicion.x > width
        || bala.posicion.y < 0 || bala.posicion.y > height){
