@@ -1,1 +1,20 @@
-
+class BalaMoco extends Proyectil{
+  private float diametro = 10;
+  public BalaMoco(PVector Player, PVector posicion){
+    super(Player);
+    this.posicion = posicion;
+    this.direccion = PVector.sub(Player, posicion);
+    this.direccion.normalize();
+    this.direccion.mult(this.velocidad.x);
+    
+  }
+  public void mover(){
+    this.posicion.add(direccion);
+  }
+  
+  public void display(){
+    fill(0,255,0);
+     noStroke();
+     ellipse(this.posicion.x,this.posicion.y,diametro,diametro);
+  }
+}
