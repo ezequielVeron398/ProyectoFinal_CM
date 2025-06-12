@@ -1,47 +1,44 @@
+
 private Player player;
-private boolean arriba, abajo, derecha,izquierda;
+private boolean w, s, d, a;
 private ArrayList<Proyectil> balaJugador;
 
-public void setup(){
-  size(600,600);
-  player = new Player(new PVector(width/2, height/2));
+public void setup() {
+  size(600, 600);
+  player = new Player();
   balaJugador = new ArrayList<Proyectil>();
 }
 
-public void  draw(){
-background(255);
- this.player.display();
- for (int i = balaJugador.size() - 1; i >= 0; i--) {
+public void  draw() {
+  background(255);
+  this.player.display();
+  for (int i = balaJugador.size() - 1; i >= 0; i--) {
     Proyectil bala = balaJugador.get(i);
     bala.mover();
     bala.display();
-    
-   if (bala.posicion.x < 0 || bala.posicion.x > width
-       || bala.posicion.y < 0 || bala.posicion.y > height){
-     balaJugador.remove(i);
+
+    if (bala.posicion.x < 0 || bala.posicion.x > width
+      || bala.posicion.y < 0 || bala.posicion.y > height) {
+      balaJugador.remove(i);
     }
   }
-  if(arriba) player.mover('u');
-  if(abajo) player.mover('d');
-  if(derecha) player.mover('r');
-  if(izquierda) player.mover('l');
+  player.moverJugador(w, s, d, a);
 }
 
-public void mousePressed(){
- balaJugador.add(new BalaJugador(player.posicion.copy(), new PVector(mouseX, mouseY)));
+public void mousePressed() {
+  balaJugador.add(new BalaJugador(player.posicion.copy(), new PVector(mouseX, mouseY)));
 }
 
-public void keyPressed(){
-  if(keyCode == UP) arriba = true;
-  if(keyCode == DOWN) abajo = true;
-  if(keyCode == RIGHT) derecha = true;
-  if(keyCode == LEFT) izquierda = true;
-  
+public void keyPressed() {
+  if (key == 's' || key == 'S') s = true;
+  if (key == 'w' || key == 'W') w = true;
+  if (key == 'a' || key == 'A') a = true;
+  if (key == 'd' || key == 'D') d = true;
 }
-  
-public void keyReleased(){
-   if(keyCode == UP) arriba = false;
-   if(keyCode == DOWN) abajo = false;
-   if(keyCode == RIGHT) derecha = false;
-   if(keyCode == LEFT) izquierda = false;
+
+public void keyReleased() {
+  if (key == 's' || key == 'S') s = false;
+  if (key == 'w' || key == 'W') w = false;
+  if (key == 'a' || key == 'A') a = false;
+  if (key == 'd' || key == 'D') d = false;
 }
