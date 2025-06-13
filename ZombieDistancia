@@ -1,24 +1,25 @@
 class ZombieDistancia extends Enemigo {
-  private PVector direccion;
+
   private float distanciaX, distanciaY, distanciaTotal, movimientoX, movimientoY, distanciaMinima;
+  
   ZombieDistancia() {
     this.direccion = new PVector(0, 0);
     this.posicion = new PVector(random(width), random(height));
-    this.velocidad = 1;
+    this.velocidad = 100;
   }
-  public void mover(PVector posJugador) {
+  public void mover(PVector posJugador, float deltaTime) {
 
-    distanciaX = posJugador.x - posicion.x;
-    distanciaY = posJugador.y - posicion.y;
-    distanciaTotal= sqrt(pow(distanciaX, 2) + pow(distanciaY, 2));
-    movimientoX = distanciaX/distanciaTotal * velocidad;
-    movimientoY = distanciaY/distanciaTotal * velocidad;
-    distanciaMinima = 200;
+    this.distanciaX = posJugador.x - this.posicion.x;
+    this.distanciaY = posJugador.y - this.posicion.y;
+    this.distanciaTotal= sqrt(pow(distanciaX, 2) + pow(distanciaY, 2));
+    this.movimientoX = this.distanciaX/this.distanciaTotal * this.velocidad;
+    this.movimientoY = this.distanciaY/this.distanciaTotal * this.velocidad;
+    this.distanciaMinima = 400;
     if (distanciaTotal > distanciaMinima) {
-      movimientoX = distanciaX / distanciaTotal * velocidad;
-      movimientoY = distanciaY / distanciaTotal * velocidad;
-      posicion.x += movimientoX;
-      posicion.y += movimientoY;
+      this.movimientoX = this.distanciaX / this.distanciaTotal * this.velocidad;
+      this.movimientoY = this.distanciaY / this.distanciaTotal * this.velocidad;
+      this.posicion.x += this.movimientoX * deltaTime;
+      this.posicion.y += this.movimientoY * deltaTime;
     }
   }
 
