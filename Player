@@ -1,65 +1,65 @@
-class Player extends GameObject{
+class Player extends GameObject {
   private char estado = 'b';
   private PImage sprite;
   private ArrayList<Proyectil> balasJugador;
-  
-  public Player(PVector posicion){
-   this.posicion = posicion;
-   this.velocidad = 5;
-   this.sprite = loadImage("sprite.png").get(0,0,25,25);
-   
-   balasJugador = new ArrayList<Proyectil>();
 
+  public Player() {
+    this.posicion = new PVector(width/2, height/2);
+    this.velocidad = 5;
+    this.sprite = loadImage("sprite.png").get(0, 0, 25, 25);
+
+    balasJugador = new ArrayList<Proyectil>();
   }
-public PVector getPosicionPlayer(){
- return this.posicion;
-}
+  public PVector getPosicionPlayer() {
+    return posicion;
+  }
 
- public void display(){
-   //fill(0);
-   //ellipse(this.posicion.x, this.posicion.y, 50,50);
-   switch(estado){
-     case 'a':{
-       this.sprite = loadImage("sprite.png").get(0,0,30,35);
-       image(this.sprite, this.posicion.x, this.posicion.y);
-       break;
-    
-     }
-     case 'b':{
-       this.sprite = loadImage("sprite.png").get(190,0,30,40);
-       image(this.sprite, this.posicion.x, this.posicion.y);
+  public void display() {
+    //fill(0);
+    //ellipse(this.posicion.x, this.posicion.y, 50,50);
+    switch(estado) {
+    case 'a':
+      {
+        this.sprite = loadImage("sprite.png").get(0, 0, 30, 35);
+        image(this.sprite, this.posicion.x, this.posicion.y);
         break;
-     }
-   }
- }
- public void mover(){
- }
- 
+      }
+    case 'b':
+      {
+        this.sprite = loadImage("sprite.png").get(190, 0, 30, 40);
+        image(this.sprite, this.posicion.x, this.posicion.y);
+        break;
+      }
+    }
+  }
+  public void mover() {
+  }
+
   public void moverJugador(boolean arriba, boolean abajo, boolean izquierda, boolean derecha) {
     if (arriba) posicion.y -= velocidad;
     if (abajo) posicion.y += velocidad;
-    if (izquierda){
-    posicion.x += velocidad;
-    this.estado = 'a';
+    if (izquierda) {
+      posicion.x += velocidad;
+      this.estado = 'a';
     }
-    if (derecha){
+    if (derecha) {
       posicion.x -= velocidad;
       this.estado = 'b';
-  }
-}
-  public void visualizarBalas(){
-    for (int i = balasJugador.size() - 1; i >= 0; i--) {
-    Proyectil bala = balasJugador.get(i);
-    bala.mover();
-    bala.display();
-    // elimna la bala si si llega o pasa el borde de la pantalla
-   if (bala.posicion.x < 0 || bala.posicion.x > width
-       || bala.posicion.y < 0 || bala.posicion.y > height){
-     balasJugador.remove(i);
     }
   }
+  public void visualizarBalas() {
+    for (int i = balasJugador.size() - 1; i >= 0; i--) {
+      Proyectil bala = balasJugador.get(i);
+      bala.mover();
+      bala.display();
+      // elimna la bala si si llega o pasa el borde de la pantalla
+      if (bala.posicion.x < 0 || bala.posicion.x > width
+        || bala.posicion.y < 0 || bala.posicion.y > height) {
+        balasJugador.remove(i);
+      }
+    }
   }
-  public void generarBalas(){
+  public void generarBalas() {
     balasJugador.add(new BalaJugador(this.posicion.copy(), new PVector(mouseX, mouseY)));
   }
 }
