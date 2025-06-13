@@ -28,6 +28,7 @@ class ZombieDistancia extends Enemigo {
     rectMode(CENTER);
     square(posicion.x, posicion.y, 40);
   }
-
-
+  public PVector getPosicionEnemigo() {
+    return posicion;
+  }
 }
