@@ -19,14 +19,16 @@ class Player extends GameObject {
     //ellipse(this.posicion.x, this.posicion.y, 50,50);
     switch(estado) {
     case 'a':
-      {
+      {  
         this.sprite = loadImage("sprite.png").get(0, 0, 30, 35);
+        imageMode(CENTER);
         image(this.sprite, this.posicion.x, this.posicion.y);
         break;
       }
     case 'b':
       {
         this.sprite = loadImage("sprite.png").get(190, 0, 30, 40);
+        imageMode(CENTER);  
         image(this.sprite, this.posicion.x, this.posicion.y);
         break;
       }
