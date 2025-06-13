@@ -5,6 +5,11 @@ private boolean w, s, d, a;
 private int tiempoEntreBala;
 private ArrayList<Proyectil> balasVomito;
 
+private float tiempoInicio;
+public float deltaTime;
+
+ 
+
 public void setup() {
   size(1000, 1000);
   player = new Player();
@@ -13,24 +18,32 @@ public void setup() {
   // balasJugador = new ArrayList<Proyectil>();
   balasVomito =new ArrayList<Proyectil>();
   this.tiempoEntreBala = 0;
+  
+  tiempoInicio = millis();
 }
 
 public void  draw() {
   background(255);
+  
+  float tiempoActual = millis();
+  
+  deltaTime =(tiempoActual - tiempoInicio)/1000.0;
+  tiempoInicio = tiempoActual;
+ 
   this.player.display();
   this.enemigo.display();
-  this.enemigo.mover(player.getPosicionPlayer());
+  this.enemigo.mover(player.getPosicionPlayer(),deltaTime);
   this.enemigoA.display();
-  this.enemigoA.mover(player.getPosicionPlayer());
+  this.enemigoA.mover(player.getPosicionPlayer(),deltaTime);
   this.player.visualizarBalas();
-
+  println(deltaTime);
 
 
   //agrega BalasMoco
 
   tiempoEntreBala++; // un cronometro para que la balaVotime tire cada medio segundo
 
-  if (tiempoEntreBala >= 30) {
+  if (tiempoEntreBala >= 60) {
     balasVomito.add(new BalaVomito(player.getPosicionPlayer(), enemigo.getPosicionEnemigo().copy()));
     balasVomito.add(new BalaVomito(player.getPosicionPlayer(), enemigoA.getPosicionEnemigo().copy()));
     tiempoEntreBala = 0;
