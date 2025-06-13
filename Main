@@ -36,7 +36,7 @@ public void  draw() {
   this.enemigoA.display();
   this.enemigoA.mover(player.getPosicionPlayer(),deltaTime);
   this.player.visualizarBalas();
-  println(deltaTime);
+ 
 
 
   //agrega BalasMoco
