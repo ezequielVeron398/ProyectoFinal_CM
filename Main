@@ -1,59 +1,57 @@
 private Player player;
-private Enemigo enemigo;
-private Enemigo enemigoA;
+private ZombieDistancia enemigo;
+private ZombieDistancia enemigoA;
 private boolean w, s, d, a;
 private int tiempoEntreBala;
 private ArrayList<Proyectil> balasVomito;
 
-public void setup(){
-  size(1000,1000);
-  player = new Player(new PVector(width/2, height/2));
-  enemigo = new Enemigo(new PVector(500,50));
-  enemigoA = new Enemigo(new PVector(0,50));
- // balasJugador = new ArrayList<Proyectil>();
+public void setup() {
+  size(1000, 1000);
+  player = new Player();
+  enemigo = new ZombieDistancia();
+  enemigoA = new ZombieDistancia();
+  // balasJugador = new ArrayList<Proyectil>();
   balasVomito =new ArrayList<Proyectil>();
   this.tiempoEntreBala = 0;
- 
 }
 
-public void  draw(){
-background(255);
- this.player.display();
- this.enemigo.display();
- this.enemigo.mover(player);
- this.enemigoA.display();
- this.enemigoA.mover(player);
- this.player.visualizarBalas();
- 
+public void  draw() {
+  background(255);
+  this.player.display();
+  this.enemigo.display();
+  this.enemigo.mover(player.getPosicionPlayer());
+  this.enemigoA.display();
+  this.enemigoA.mover(player.getPosicionPlayer());
+  this.player.visualizarBalas();
+
 
 
   //agrega BalasMoco
-  
+
   tiempoEntreBala++; // un cronometro para que la balaVotime tire cada medio segundo
-  
-  if(tiempoEntreBala >= 30){
+
+  if (tiempoEntreBala >= 30) {
     balasVomito.add(new BalaVomito(player.getPosicionPlayer(), enemigo.getPosicionEnemigo().copy()));
     balasVomito.add(new BalaVomito(player.getPosicionPlayer(), enemigoA.getPosicionEnemigo().copy()));
     tiempoEntreBala = 0;
   }
   //visualiza  y elimina balaVomito
-   for (int i = balasVomito.size() - 1; i >= 0; i--) {
+  for (int i = balasVomito.size() - 1; i >= 0; i--) {
     Proyectil bala = balasVomito.get(i);
     bala.mover();
     bala.display();
-   
-   if (bala.posicion.x < 0 || bala.posicion.x > width
-       || bala.posicion.y < 0 || bala.posicion.y > height){
-     balasVomito.remove(i);
-    } 
+
+    if (bala.posicion.x < 0 || bala.posicion.x > width
+      || bala.posicion.y < 0 || bala.posicion.y > height) {
+      balasVomito.remove(i);
+    }
   }
-  
+
   player.moverJugador(w, s, d, a);
 }
 
-public void mousePressed(){
- player.generarBalas();
-
+public void mousePressed() {
+  player.generarBalas();
 }
 
 
