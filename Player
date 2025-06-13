@@ -1,67 +1,113 @@
-class Player extends GameObject {
-  private char estado = 'b';
+lass Player extends GameObject{
+  private char estado; //se usa para cambiar la visualizacion del sprite dependiendo como se mueve
   private PImage sprite;
+  
+  private int xFrame = 0;
+  private int yFrame = 0 ;
+  private int anchoFrame = 32;
+  private int altoFrame = 32;
+  private float xFrameFloat = 0;
+  private float nextxFrameFloat;
+  private float velocidadFrame = 50;
+  
   private ArrayList<Proyectil> balasJugador;
+  
+  public Player(){
+   this.posicion = new PVector(width/2, height/2);
+   this.velocidad = 100;
+   this.estado = 'q';
+   imageMode(CENTER);
+   this.sprite = loadImage("sprite.png");
+   
+   this.nextxFrameFloat = anchoFrame;
+   
+   balasJugador = new ArrayList<Proyectil>();
 
-  public Player() {
-    this.posicion = new PVector(width/2, height/2);
-    this.velocidad = 5;
-    this.sprite = loadImage("sprite.png").get(0, 0, 25, 25);
-
-    balasJugador = new ArrayList<Proyectil>();
   }
-  public PVector getPosicionPlayer() {
-    return posicion;
-  }
+public PVector getPosicionPlayer(){
+ return this.posicion;
+}
 
-  public void display() {
-    //fill(0);
-    //ellipse(this.posicion.x, this.posicion.y, 50,50);
-    switch(estado) {
-    case 'a':
-      {  
-        this.sprite = loadImage("sprite.png").get(0, 0, 30, 35);
-        imageMode(CENTER);
-        image(this.sprite, this.posicion.x, this.posicion.y);
+ public void display(){
+
+   switch(estado){
+     case 'q':{
+    
+       image(this.sprite.get(this.xFrame,yFrame,anchoFrame,altoFrame), this.posicion.x, this.posicion.y);
+       break;
+     }
+     case 'a':{
+       
+        
+       image(this.sprite.get(this.xFrame,this.yFrame,this.anchoFrame,this.altoFrame), this.posicion.x, this.posicion.y);
+       xFrameFloat +=velocidadFrame*deltaTime;
+       if(this.xFrameFloat >= this.nextxFrameFloat){
+          this.xFrame += this.anchoFrame;
+          this.xFrameFloat = 0;
+       }
+       if(this.xFrame >= 8*anchoFrame){
+         this.xFrame = 128;
+         this.nextxFrameFloat= this.anchoFrame;
+         
+       }
         break;
-      }
-    case 'b':
-      {
-        this.sprite = loadImage("sprite.png").get(190, 0, 30, 40);
-        imageMode(CENTER);  
-        image(this.sprite, this.posicion.x, this.posicion.y);
-        break;
-      }
-    }
-  }
-  public void mover() {
-  }
 
+    
+     }
+     case 'd':{
+       
+       image(this.sprite.get(this.xFrame,this.yFrame,this.anchoFrame,this.altoFrame), this.posicion.x, this.posicion.y);
+       xFrameFloat +=velocidadFrame*deltaTime;
+       if(this.xFrameFloat >= this.nextxFrameFloat){
+          this.xFrame += this.anchoFrame;
+          this.xFrameFloat = 0;
+       }
+       if(this.xFrame >= 4*anchoFrame){
+         this.xFrame = 0;
+         this.nextxFrameFloat= this.anchoFrame;
+       }
+       
+        break;
+     }
+   }
+ }
+ public void mover(){
+ }
+ 
   public void moverJugador(boolean arriba, boolean abajo, boolean izquierda, boolean derecha) {
-    if (arriba) posicion.y -= velocidad;
-    if (abajo) posicion.y += velocidad;
-    if (izquierda) {
-      posicion.x += velocidad;
-      this.estado = 'a';
-    }
-    if (derecha) {
-      posicion.x -= velocidad;
-      this.estado = 'b';
-    }
+    if (arriba) posicion.y -= velocidad*deltaTime;
+    if (abajo) posicion.y += velocidad*deltaTime;
+    if (izquierda){
+    this.posicion.x -= velocidad*deltaTime;
+    
+    if (this.estado != 'a') {
+    this.estado = 'a';
+    this.xFrame = 128;
+    this.xFrameFloat = 0;
   }
-  public void visualizarBalas() {
+    }
+    if (derecha){
+      this.posicion.x += velocidad*deltaTime;
+      this.estado = 'd';
+  }
+   if(!arriba && !abajo && !izquierda && !derecha){
+    this.estado = 'q';
+    this.xFrame = 448;
+   }
+}
+  public void visualizarBalas(){
     for (int i = balasJugador.size() - 1; i >= 0; i--) {
-      Proyectil bala = balasJugador.get(i);
-      bala.mover();
-      bala.display();
-      // elimna la bala si si llega o pasa el borde de la pantalla
-      if (bala.posicion.x < 0 || bala.posicion.x > width
-        || bala.posicion.y < 0 || bala.posicion.y > height) {
-        balasJugador.remove(i);
-      }
+    Proyectil bala = balasJugador.get(i);
+    bala.mover();
+    bala.display();
+    // elimna la bala si si llega o pasa el borde de la pantalla
+   if (bala.posicion.x < 0 || bala.posicion.x > width
+       || bala.posicion.y < 0 || bala.posicion.y > height){
+     balasJugador.remove(i);
     }
   }
-  public void generarBalas() {
+  }
+  public void generarBalas(){
     balasJugador.add(new BalaJugador(this.posicion.copy(), new PVector(mouseX, mouseY)));
   }
 }
