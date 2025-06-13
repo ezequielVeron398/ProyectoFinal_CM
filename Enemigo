@@ -1,24 +1,5 @@
-class Enemigo extends GameObject{
-  private PVector direccion;
-  public Enemigo(PVector posicion){
-    this.posicion = posicion;
-  }
-  public PVector getPosicionEnemigo(){
-   return this.posicion;
-}
-
-  public void mover(){
-  }
-  public void mover(Player player){
-    this.direccion = PVector.sub(player.getPosicionPlayer(), this.posicion);
-    this.direccion.normalize();
-    this.posicion.add(direccion);
-    
-  }
-  
-  public void display(){
-    fill(0,255,0);
-    noStroke();
-    rect(this.posicion.x, this.posicion.y, 50,50);
+abstract class Enemigo extends GameObject {
+  protected PVector direccion;
+  Enemigo() {
   }
 }
