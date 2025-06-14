@@ -1,4 +1,4 @@
-lass Player extends GameObject{
+class Player extends GameObject{
   private char estado; //se usa para cambiar la visualizacion del sprite dependiendo como se mueve
   private PImage sprite;
   
