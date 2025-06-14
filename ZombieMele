@@ -1,1 +1,32 @@
+class ZombieMele extends Enemigo {
+  private Utilidades utilidades;
+  private float ancho, alto;
 
+  ZombieMele() {
+
+    this.posicion = new PVector(10+ random(width), random(height));
+    this.velocidad = 100;
+    this.utilidades = new Utilidades();
+    this.ancho = 30;
+    this.alto = 30;
+  }
+  public void mover(PVector posJugador, float deltaTime) {
+    utilidades.movimientoEnemigo(this.posicion, posJugador, this.velocidad, 0, deltaTime);
+  }
+
+
+  public void display() {
+    fill(255, 0, 255);
+    rectMode(CENTER);
+    rect(posicion.x, posicion.y, ancho, alto);
+  }
+  public PVector getPosicion() {
+    return posicion;
+  }
+  public float getAncho() {
+    return ancho;
+  }
+  public float getAlto() {
+    return alto;
+  }
+}
