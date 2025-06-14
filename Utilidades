@@ -1,0 +1,33 @@
+class Utilidades {
+
+  Utilidades() {
+  }
+
+  public void movimientoEnemigo(PVector posInicial, PVector posFinal, float velocidad, float distanciaMinima, float deltaTime) {
+    float distanciaX = posFinal.x - posInicial.x;
+    float distanciaY = posFinal.y - posInicial.y;
+    float distancia = sqrt(distanciaX * distanciaX + distanciaY * distanciaY);
+
+    if (distancia > distanciaMinima) {
+      float movX = distanciaX  / distancia * velocidad * deltaTime;
+      float movY = distanciaY / distancia * velocidad * deltaTime;
+      posInicial.x += movX;
+      posInicial.y += movY;
+    }
+  }
+  //public void movimientoProyectil(PVector posInicial, PVector posFinal, float velocidad, float deltaTime) {
+  //  float distanciaX = posFinal.x - posInicial.x;
+  //  float distanciaY = posFinal.y - posInicial.y;
+  //  float distancia = sqrt(distanciaX * distanciaX + distanciaY * distanciaY);
+  //  float movX = distanciaX  / distancia * velocidad * deltaTime;
+  //  float movY = distanciaY / distancia * velocidad * deltaTime;
+  //  posInicial.x += movX;
+  //  posInicial.y += movY;
+  //  //this.posInicial = new PVector(posJugador.x, posJugador.y);
+  //  //this.posFinal = new PVector(pmouseX, pmouseY);
+  //  //this.distancia = new PVector(posFinal.x - posInicial.x, posFinal.y - posInicial.y);
+  //  //this.hipotenusa = sqrt(distancia.x * distancia.x + distancia.y * distancia.y);
+  //  //this.movimiento = new PVector(distancia.x/hipotenusa, distancia.y/hipotenusa);
+  //  //this.velocidad = 3;
+  //}
+}
