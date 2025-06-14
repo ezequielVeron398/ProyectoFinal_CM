@@ -1,1 +1,29 @@
+class Sprite {
+  private PImage sprite;
 
+  private int xFrame = 128;
+  private int yFrame = 0 ;
+  private int anchoFrame = 32;
+  private int altoFrame = 25;
+  private float xFrameFloat = 0;
+  private float nextxFrameFloat;
+  private float velocidadFrame = 50;
+
+  public Sprite() {
+    imageMode(CENTER);
+    this.sprite = loadImage("slime.png");
+  }
+
+  public void display(PVector posicion) {
+    image(this.sprite.get(this.xFrame, this.yFrame, this.anchoFrame, this.altoFrame), posicion.x, posicion.y);
+    xFrameFloat +=velocidadFrame*deltaTime;
+    if (this.xFrameFloat >= this.nextxFrameFloat) {
+      this.xFrame += this.anchoFrame;
+      this.xFrameFloat = 0;
+    }
+    if (this.xFrame >= 4*anchoFrame) {
+      this.xFrame = 0;
+      this.nextxFrameFloat= this.anchoFrame;
+    }
+  }
+}
