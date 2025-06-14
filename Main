@@ -1,21 +1,22 @@
 private Player player;
 private ZombieDistancia enemigo;
 private ZombieDistancia enemigoA;
+private PImage fondo;
 private boolean w, s, d, a;
 private int tiempoEntreBala;
 private ArrayList<Proyectil> balasVomito;
 
-private float tiempoInicio;
+private int tiempoInicio;
 public float deltaTime;
 
  
 
 public void setup() {
-  size(1000, 1000);
+  size(1024, 1024);
+  this.fondo = loadImage("esenario4.png");
   player = new Player();
   enemigo = new ZombieDistancia();
   enemigoA = new ZombieDistancia();
-  // balasJugador = new ArrayList<Proyectil>();
   balasVomito =new ArrayList<Proyectil>();
   this.tiempoEntreBala = 0;
   
@@ -23,19 +24,19 @@ public void setup() {
 }
 
 public void  draw() {
-  background(255);
+  background(this.fondo);
   
-  float tiempoActual = millis();
+  int tiempoActual = millis();
   
   deltaTime =(tiempoActual - tiempoInicio)/1000.0;
   tiempoInicio = tiempoActual;
  
-  this.player.display();
-  this.enemigo.display();
-  this.enemigo.mover(player.getPosicionPlayer(),deltaTime);
-  this.enemigoA.display();
-  this.enemigoA.mover(player.getPosicionPlayer(),deltaTime);
-  this.player.visualizarBalas();
+  player.display();
+  enemigo.display();
+  enemigo.mover(player.getPosicionPlayer(),deltaTime);
+  enemigoA.display();
+  enemigoA.mover(player.getPosicionPlayer(),deltaTime);
+  player.visualizarBalas();
  
 
 
@@ -60,7 +61,7 @@ public void  draw() {
     }
   }
 
-  player.moverJugador(w, s, d, a);
+  player.moverJugador(w, s, a, d);
 }
 
 public void mousePressed() {
