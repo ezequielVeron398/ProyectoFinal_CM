@@ -1,52 +1,45 @@
 private Player player;
 private ZombieDistancia enemigo;
-private ZombieDistancia enemigoA;
+private ZombieMele enemigoA;
+private Utilidades utilidades;
 private PImage fondo;
 private boolean w, s, d, a;
-private int tiempoEntreBala;
+private int tiempoEntreBala,tiempoInicio;
 private ArrayList<Proyectil> balasVomito;
-
-private int tiempoInicio;
+private boolean toco;
 public float deltaTime;
-
- 
 
 public void setup() {
   size(1024, 1024);
   this.fondo = loadImage("esenario4.png");
   player = new Player();
   enemigo = new ZombieDistancia();
-  enemigoA = new ZombieDistancia();
+  enemigoA = new ZombieMele();
   balasVomito =new ArrayList<Proyectil>();
+  utilidades = new Utilidades();
   this.tiempoEntreBala = 0;
-  
+  toco = false;
   tiempoInicio = millis();
 }
 
 public void  draw() {
   background(this.fondo);
-  
   int tiempoActual = millis();
-  
   deltaTime =(tiempoActual - tiempoInicio)/1000.0;
   tiempoInicio = tiempoActual;
- 
   player.display();
   enemigo.display();
-  enemigo.mover(player.getPosicionPlayer(),deltaTime);
+  enemigo.mover(player.getPosicionPlayer(), deltaTime);
   enemigoA.display();
-  enemigoA.mover(player.getPosicionPlayer(),deltaTime);
+  enemigoA.mover(player.getPosicionPlayer(), deltaTime);
   player.visualizarBalas();
- 
-
-
+  toco = utilidades.colisionRectangulos(enemigoA.getPosicion(), enemigoA.getAncho(), enemigoA.getAlto(), enemigo.getPosicion(), enemigo.getAncho(), enemigo.getAlto());
+  println(toco); // prueba utilidad
+  
   //agrega BalasMoco
-
   tiempoEntreBala++; // un cronometro para que la balaVotime tire cada medio segundo
-
   if (tiempoEntreBala >= 60) {
-    balasVomito.add(new BalaVomito(player.getPosicionPlayer(), enemigo.getPosicionEnemigo().copy()));
-    balasVomito.add(new BalaVomito(player.getPosicionPlayer(), enemigoA.getPosicionEnemigo().copy()));
+    balasVomito.add(new BalaVomito(player.getPosicionPlayer(), enemigo.getPosicion().copy()));
     tiempoEntreBala = 0;
   }
   //visualiza  y elimina balaVomito
