@@ -20,7 +20,7 @@ class ZombieMele extends Enemigo {
 
 
   public void display() {
-    sprite.display(this.posicion);
+    sprite.displayEnemigo(this.posicion);
   }
   public PVector getPosicion() {
     return posicion;
