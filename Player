@@ -1,6 +1,7 @@
 class Player extends GameObject{
   private char estado; //se usa para cambiar la visualizacion del sprite dependiendo como se mueve
   private PImage sprite;
+    private int radioCollider;
   
   private int xFrame = 0;
   private int yFrame = 0 ;
@@ -18,6 +19,7 @@ class Player extends GameObject{
    this.estado = 'q';
    imageMode(CENTER);
    this.sprite = loadImage("sprite.png");
+       this.radioCollider = 12;
    
    this.nextxFrameFloat = anchoFrame;
    
@@ -109,5 +111,32 @@ public PVector getPosicionPlayer(){
   }
   public void generarBalas(){
     balasJugador.add(new BalaJugador(this.posicion.copy(), new PVector(mouseX, mouseY)));
+  }
+    public void colisionarJugador(ArrayList<Proyectil> balasVomito) {
+    for (int i = balasVomito.size() - 1; i >= 0; i--) {
+      Proyectil bala = balasVomito.get(i);
+      float d = bala.posicion.dist(this.posicion);
+
+      if (d < (this.radioCollider + ((BalaVomito) bala).colliderVomito)) {
+        println("Hay colision");
+        balasVomito.remove(i);
+      }
+    }
+  }
+  public void colisionarEnemigos(ZombieDistancia enemigo, ZombieMele enemigoA) {
+    for (int i = balasJugador.size() - 1; i >= 0; i--) {
+      Proyectil bala = balasJugador.get(i);
+      float d1 = bala.posicion.dist(enemigo.getPosicionEnemigo());
+      float d2 = bala.posicion.dist(enemigoA.getPosicionEnemigo());
+      if (d1 < 10 + enemigo.getRadioColision()) {
+        balasJugador.remove(i);
+        enemigo.reaparecer();
+      }
+
+      if (d2 < 10 + enemigoA.getRadioColision()) {
+        balasJugador.remove(i);
+        enemigoA.reaparecer();
+      }
+    }
   }
 }
