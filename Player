@@ -30,8 +30,14 @@ class Player extends GameObject {
   }
 
   public void moverJugador(boolean arriba, boolean abajo, boolean izquierda, boolean derecha) {
-    if (arriba) posicion.y -= velocidad*deltaTime;
-    if (abajo) posicion.y += velocidad*deltaTime;
+    if (arriba) {
+      this.posicion.y -= velocidad*deltaTime;
+      this.estado = 'w';
+    }
+    if (abajo) {
+      this.posicion.y += velocidad*deltaTime;
+      this.estado = 's';
+    }
     if (izquierda) {
       this.posicion.x -= velocidad*deltaTime;
       this.estado = 'a';
