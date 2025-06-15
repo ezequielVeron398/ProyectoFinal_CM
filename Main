@@ -6,6 +6,7 @@ private PImage fondo;
 private boolean w, s, d, a;
 private int tiempoEntreBala,tiempoInicio;
 private ArrayList<Proyectil> balasVomito;
+private ArrayList<Proyectil> balasJugador;
 private boolean toco;
 public float deltaTime;
 
@@ -15,6 +16,7 @@ public void setup() {
   player = new Player();
   enemigo = new ZombieDistancia();
   enemigoA = new ZombieMele();
+  balasVomito =new ArrayList<Proyectil>();
   balasVomito =new ArrayList<Proyectil>();
   utilidades = new Utilidades();
   this.tiempoEntreBala = 0;
@@ -34,7 +36,9 @@ public void  draw() {
   enemigoA.mover(player.getPosicionPlayer(), deltaTime);
   player.visualizarBalas();
   toco = utilidades.colisionRectangulos(enemigoA.getPosicion(), enemigoA.getAncho(), enemigoA.getAlto(), enemigo.getPosicion(), enemigo.getAncho(), enemigo.getAlto());
-  println(toco); // prueba utilidad
+  //println(toco); // prueba utilidad
+  player.colisionarJugador(balasVomito);
+  player.colisionarEnemigos(enemigo, enemigoA);
   
   //agrega BalasMoco
   tiempoEntreBala++; // un cronometro para que la balaVotime tire cada medio segundo
