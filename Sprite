@@ -47,7 +47,7 @@ class Sprite {
     case 'a':
       {
 
-        image(this.jugadorIzq.get(this.xFrameJugador, this.yFrameJugador, this.anchoFrameJugador, this.altoFrameJugador), posicion.x, posicion.y);
+        image(this.jugadorIzq.get(this.xFrameJugador-1, this.yFrameJugador, this.anchoFrameJugador, this.altoFrameJugador), posicion.x, posicion.y);
         xFrameFloat +=velocidadFrame*deltaTime;
         if (this.xFrameFloat >= this.nextxFrameFloat) {
           this.xFrameJugador += this.anchoFrameJugador;
