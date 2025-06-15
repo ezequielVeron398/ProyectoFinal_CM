@@ -1,11 +1,13 @@
 class BalaVomito extends Proyectil{
   private float diametro = 10;
+    private int colliderVomito;
   
   public BalaVomito(PVector player, PVector posicion){
     this.posicion = posicion;
     this.direccion = PVector.sub(player, posicion);
     this.direccion.normalize();
     this.direccion.mult(this.velocidad);
+    this.colliderVomito = 5;
     
   }
   public void mover(){
