@@ -2,7 +2,8 @@ class Sprite {
   private PImage Enemigo;
   private PImage jugador;
   private PImage jugadorIzq;
-
+  private PImage jugadorAtras;
+  private PImage jugadorAbajo;
   private int xFrame = 128;
   private int yFrame = 0 ;
   private int xFrameJugador = 0;
@@ -20,6 +21,8 @@ class Sprite {
     this.Enemigo = loadImage("slime.png");
     this.jugador = loadImage("sprite.png");
     this.jugadorIzq = loadImage("izquierda.png");
+    this.jugadorAtras = loadImage("arriba.png");
+    this.jugadorAbajo = loadImage("abajo.png");
     this.nextxFrameFloat = anchoFrame;
   }
 
@@ -40,7 +43,7 @@ class Sprite {
     switch(estado) {
     case 'q':
       {
-        this.xFrameJugador = 448;
+        this.xFrameJugador = 384;
         image(this.jugador.get(this.xFrameJugador, this.yFrameJugador, this.anchoFrameJugador, this.altoFrameJugador), posicion.x, posicion.y);
         break;
       }
@@ -73,6 +76,36 @@ class Sprite {
           this.nextxFrameFloat= this.anchoFrameJugador;
         }
 
+        break;
+      }
+    case 'w':
+      {
+
+        image(this.jugadorAtras.get(this.xFrameJugador, this.yFrameJugador, this.anchoFrameJugador, this.altoFrameJugador), posicion.x, posicion.y);
+        xFrameFloat +=velocidadFrame*deltaTime;
+        if (this.xFrameFloat >= this.nextxFrameFloat) {
+          this.xFrameJugador += this.anchoFrameJugador;
+          this.xFrameFloat = 0;
+        }
+        if (this.xFrameJugador >= 5*anchoFrame) {
+          this.nextxFrameFloat= this.anchoFrameJugador;
+          this.xFrameJugador = 0;
+        }
+        break;
+      }
+    case 's':
+      {
+
+        image(this.jugadorAbajo.get(this.xFrameJugador, this.yFrameJugador, this.anchoFrameJugador, this.altoFrameJugador), posicion.x, posicion.y);
+        xFrameFloat +=velocidadFrame*deltaTime;
+        if (this.xFrameFloat >= this.nextxFrameFloat) {
+          this.xFrameJugador += this.anchoFrameJugador;
+          this.xFrameFloat = 0;
+        }
+        if (this.xFrameJugador >= 3*anchoFrame) {
+          this.nextxFrameFloat= this.anchoFrameJugador;
+          this.xFrameJugador = 0;
+        }
         break;
       }
     }
