@@ -2,34 +2,39 @@ class Player extends GameObject {
   private char estado; //se usa para cambiar la visualizacion del sprite dependiendo como se mueve
   private Sprite sprite;
   private int radioCollider;
-
-
-  private ArrayList<Proyectil> balasJugador;
+  private Arma arma;
+  private float vidaJugador;
+  private Utilidad utilidad;
+  private boolean dañoAJugador;
+  private BalaVomito vomito;
 
   public Player() {
     this.posicion = new PVector(width/2, height/2);
     this.velocidad = 100;
     this.sprite = new Sprite();
     this.estado = 'q';
-
-
+    this.arma = new Arma(this.posicion);
     this.radioCollider = 12;
-
-
-
-    balasJugador = new ArrayList<Proyectil>();
+    this.vidaJugador = 100;
+    this.utilidad = new Utilidad();
+    this.dañoAJugador = false;
+    this.vomito = new BalaVomito(this.posicion, this.posicion);
   }
   public PVector getPosicionPlayer() {
     return this.posicion;
   }
 
+  public void recargarBalas() {
+    this.arma.generarBalas();
+  }
   public void display() {
     this.sprite.displayJugador(estado, this.posicion);
   }
-  public void mover() {
+  public void usaArma() {
+    this.arma.disparar();
   }
 
-  public void moverJugador(boolean arriba, boolean abajo, boolean izquierda, boolean derecha) {
+  public void mover(boolean arriba, boolean abajo, boolean izquierda, boolean derecha) {
     if (arriba) {
       this.posicion.y -= velocidad*deltaTime;
       this.estado = 'w';
@@ -50,46 +55,56 @@ class Player extends GameObject {
       this.estado = 'q';
     }
   }
-  public void visualizarBalas() {
-    for (int i = balasJugador.size() - 1; i >= 0; i--) {
-      Proyectil bala = balasJugador.get(i);
-      bala.mover();
-      bala.display();
-      // elimna la bala si si llega o pasa el borde de la pantalla
-      if (bala.posicion.x < 0 || bala.posicion.x > width
-        || bala.posicion.y < 0 || bala.posicion.y > height) {
-        balasJugador.remove(i);
-      }
-    }
-  }
-  public void generarBalas() {
-    balasJugador.add(new BalaJugador(this.posicion.copy(), new PVector(mouseX, mouseY)));
-  }
-  public void colisionarJugador(ArrayList<Proyectil> balasVomito) {
+
+  public void colisionarJugadorBala(ArrayList<Proyectil> balasVomito) {
     for (int i = balasVomito.size() - 1; i >= 0; i--) {
       Proyectil bala = balasVomito.get(i);
       float d = bala.posicion.dist(this.posicion);
 
       if (d < (this.radioCollider + ((BalaVomito) bala).colliderVomito)) {
-        println("Hay colision");
+        //println("Hay colision");
+        dañoAJugador = true;
+
         balasVomito.remove(i);
       }
     }
   }
-  public void colisionarEnemigos(ZombieDistancia enemigo, ZombieMele enemigoA) {
-    for (int i = balasJugador.size() - 1; i >= 0; i--) {
-      Proyectil bala = balasJugador.get(i);
-      float d1 = bala.posicion.dist(enemigo.getPosicionEnemigo());
-      float d2 = bala.posicion.dist(enemigoA.getPosicionEnemigo());
-      if (d1 < 10 + enemigo.getRadioColision()) {
-        balasJugador.remove(i);
-        enemigo.reaparecer();
-      }
+  public void colisionarEnemigos(ArrayList<ZombieDistancia> enemigos, ArrayList<ZombieMele> enemigosA) {
+    for (int i = this.arma.balasJugador.size() - 1; i >= 0; i--) {
+      Proyectil bala = arma.balasJugador.get(i);
+      boolean colisiono = false;
+      for (int j =0; j < enemigos.size(); j++) {
+        ZombieDistancia enemigo = enemigos.get(j);
+        float d = bala.posicion.dist(enemigo.getPosicionEnemigo());
+        if (d < 10 + enemigo.getRadioColision()) {
+          this.arma.balasJugador.remove(i);
+          //enemigo.reaparecer();
+          if (enemigo.recibeDaño()) enemigos.remove(j) ;
 
-      if (d2 < 10 + enemigoA.getRadioColision()) {
-        balasJugador.remove(i);
-        enemigoA.reaparecer();
+          colisiono = true;
+          break;
+        }
       }
+      if (colisiono) continue;
+
+      for (ZombieMele enemigo : enemigosA) {
+        float d = bala.posicion.dist(enemigo.getPosicionEnemigo());
+        if (d < 10 + enemigo.getRadioColision()) {
+          this.arma.balasJugador.remove(i);
+          enemigo.reaparecer();
+          break;
+        }
+      }
+    }
+  }
+  public void recibioDañoDistancia() {
+    if (dañoAJugador) {
+
+      float dañoBalaVomito = vomito.getDaño();
+      this.vidaJugador =utilidad.recibeDaño(vidaJugador, dañoBalaVomito);
+      println(vidaJugador);
+      this.dañoAJugador = false;
+      if (vidaJugador == 0) println("Jugador murio");
     }
   }
 }
