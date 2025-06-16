@@ -1,14 +1,9 @@
-abstract class Proyectil extends GameObject{
+abstract class Proyectil extends GameObject {
   protected PVector direccion;
-  public Proyectil(){
-  this.velocidad = 10;
+  public Proyectil() {
+    this.velocidad = 300;
   }
-  
- abstract  public void display();
 
-  
-  
+  abstract  public void display();
   abstract public void mover();
-  
-  
 }
