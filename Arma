@@ -1,1 +1,23 @@
+class Arma {
+  private ArrayList<Proyectil> balasJugador;
+  private PVector posicion;
+  public Arma(PVector posicion) {
+    this.posicion = posicion;
+    this.balasJugador = new ArrayList<Proyectil>();
+  }
+  public void disparar() {
 
+    for (int i = balasJugador.size() - 1; i >= 0; i--) { //visualiza las balas
+      Proyectil bala = balasJugador.get(i);
+      bala.mover();
+      bala.display();
+      if (bala.posicion.x < 0 || bala.posicion.x > width //elimna las balas
+        || bala.posicion.y < 0 || bala.posicion.y > height) {
+        balasJugador.remove(i);
+      }
+    }
+  }
+  public void generarBalas() { //genenra BalasJugador
+    balasJugador.add(new BalaJugador(this.posicion.copy(), new PVector(mouseX, mouseY))); //agrega las balas
+  }
+}
