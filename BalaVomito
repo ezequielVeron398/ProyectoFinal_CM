@@ -1,22 +1,28 @@
-class BalaVomito extends Proyectil{
+class BalaVomito extends Proyectil {
+  private Utilidad utilidad;
   private float diametro = 10;
-    private int colliderVomito;
-  
-  public BalaVomito(PVector player, PVector posicion){
+  private int colliderVomito;
+  private float daño;
+
+  public BalaVomito(PVector objetivo, PVector posicion) {
     this.posicion = posicion;
-    this.direccion = PVector.sub(player, posicion);
-    this.direccion.normalize();
-    this.direccion.mult(this.velocidad);
+    this.utilidad = new Utilidad();
+    this.direccion = this.utilidad.trayectoria(this.posicion, objetivo);
     this.colliderVomito = 5;
-    
+    this.daño = 10;
   }
-  public void mover(){
-    this.posicion.add(direccion);
+  public void mover() {
+    this.posicion.x += this.direccion.x*this.velocidad*deltaTime;
+    this.posicion.y += this.direccion.y*this.velocidad*deltaTime;
   }
+
+  public void display() {
+    fill(0, 255, 0);
+    noStroke();
+    ellipse(this.posicion.x, this.posicion.y, diametro, diametro);
+  }
+  public float getDaño(){
+    return daño; 
   
-  public void display(){
-    fill(0,255,0);
-     noStroke();
-     ellipse(this.posicion.x,this.posicion.y,diametro,diametro);
   }
 }
