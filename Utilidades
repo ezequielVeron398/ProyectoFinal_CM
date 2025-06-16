@@ -1,6 +1,6 @@
-class Utilidades {
+class Utilidad {
 
-  Utilidades() {
+  Utilidad() {
   }
 
   public void movimientoEnemigo(PVector posInicial, PVector posFinal, float velocidad, float distanciaMinima, float deltaTime) {
@@ -16,7 +16,7 @@ class Utilidades {
     }
   }
 
-  public boolean colisionRectangulos(PVector posA, float anchoA, float alturaA, PVector posB, float anchoB, float alturaB) {
+  private boolean colisionRectangulos(PVector posA, float anchoA, float alturaA, PVector posB, float anchoB, float alturaB) {
 
     float distanciaX = posA.x - posB.x;
     float distanciaY = posA.y - posB.y;
@@ -29,5 +29,16 @@ class Utilidades {
     return distanciaX < (anchoA / 2 + anchoB / 2) &&
       distanciaY < (alturaA / 2 + alturaB / 2);
   }
-}
 
+  public PVector trayectoria(PVector player, PVector objetivo) {
+    PVector distancia = new PVector(objetivo.x - player.x, objetivo.y - player.y);
+    float hipotenusa = sqrt(distancia.x * distancia.x + distancia.y * distancia.y);
+    PVector movimiento = new PVector(distancia.x/hipotenusa, distancia.y/hipotenusa);
+    return  movimiento;
+  }
+  public float recibeDaño(float vida, float daño){
+    
+    
+    return vida - daño;
+  }
+}
