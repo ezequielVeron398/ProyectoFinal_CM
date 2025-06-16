@@ -1,37 +1,57 @@
 class ZombieDistancia extends Enemigo {
-  private Utilidades utilidades;
-  private float ancho, alto;
+  private Utilidad utilidades;
   private int colliderZombie;
   private Sprite sprite;
-
-
-  ZombieDistancia() {
-
-    this.posicion = new PVector(random(width), random(height));
+  private ArrayList<Proyectil> balasVomito;
+  private int tiempoEntreBala = 0; // cronometro para cada cuanto tira una bala
+ private int vida;
+  public ZombieDistancia() {
+    this.posicion = new PVector(random(width), random(-10, height+100));
     this.velocidad = 100;
-    this.utilidades = new Utilidades();
-    this.ancho = 30;
-    this.alto = 30;
+    this.utilidades = new Utilidad();
     this.colliderZombie = 10;
-    sprite = new Sprite();
+    this.sprite = new Sprite();
+    this.balasVomito =new ArrayList<Proyectil>();
+    vida = 10;
   }
+
   public void mover(PVector posJugador, float deltaTime) {
     utilidades.movimientoEnemigo(this.posicion, posJugador, this.velocidad, 400, deltaTime);
   }
 
-
   public void display() {
     sprite.displayEnemigo(this.posicion);
   }
+  public boolean recibeDaño(){
+    boolean murio=false;
+    vida-= 2;
+    println("vida");
+    if(vida <=0) murio = true ;
+    println(murio);
+    return murio;
+  }
+  public void disparar() {
+    tiempoEntreBala++; // un cronometro para la balaVotime
+    if (tiempoEntreBala >= 90) {
+      balasVomito.add(new BalaVomito(player.getPosicionPlayer(), this.posicion.copy())); //agrega BalasMoco
+      tiempoEntreBala = 0; //reinicia el cronometro
+    }
+    for (int i = this.balasVomito.size() - 1; i >= 0; i--) {  //visualiza balaVomito
+      Proyectil bala = this.balasVomito.get(i);
+      bala.mover();
+      bala.display();
+
+      if (bala.posicion.x < 0 || bala.posicion.x > width //elimina bala
+        || bala.posicion.y < 0 || bala.posicion.y > height) {
+        balasVomito.remove(i);
+      }
+    }
+  }
+
   public PVector getPosicion() {
     return posicion;
   }
-  public float getAncho() {
-    return ancho;
-  }
-  public float getAlto() {
-    return alto;
-  }
+
   public PVector getPosicionEnemigo() {
     return posicion;
   }
@@ -39,6 +59,11 @@ class ZombieDistancia extends Enemigo {
     return this.colliderZombie;
   }
   public void reaparecer() {
-    this.posicion = new PVector(random(width), random(height));
+    this.posicion.x += this.posicion.x+20;//new PVector(random(500, width), random(500, height));
+    this.posicion.y += this.posicion.y+20;
+  }
+
+  public ArrayList<Proyectil> getBalasVomito() {
+    return this.balasVomito;
   }
 }
