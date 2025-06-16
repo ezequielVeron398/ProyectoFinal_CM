@@ -4,6 +4,7 @@ class Sprite {
   private PImage jugadorIzq;
   private PImage jugadorAtras;
   private PImage jugadorAbajo;
+
   private int xFrame = 128;
   private int yFrame = 0 ;
   private int xFrameJugador = 0;
@@ -14,7 +15,7 @@ class Sprite {
   private int altoFrameJugador = 32;
   private float xFrameFloat = 0;
   private float nextxFrameFloat;
-  private float velocidadFrame = 50;
+  private float velocidadFrame = 400;
 
   public Sprite() {
     imageMode(CENTER);
@@ -49,7 +50,6 @@ class Sprite {
       }
     case 'a':
       {
-
         image(this.jugadorIzq.get(this.xFrameJugador-1, this.yFrameJugador, this.anchoFrameJugador, this.altoFrameJugador), posicion.x, posicion.y);
         xFrameFloat +=velocidadFrame*deltaTime;
         if (this.xFrameFloat >= this.nextxFrameFloat) {
@@ -64,7 +64,6 @@ class Sprite {
       }
     case 'd':
       {
-
         image(this.jugador.get(this.xFrameJugador, this.yFrameJugador, this.anchoFrameJugador, this.altoFrameJugador), posicion.x, posicion.y);
         xFrameFloat +=velocidadFrame*deltaTime;
         if (this.xFrameFloat >= this.nextxFrameFloat) {
@@ -80,7 +79,6 @@ class Sprite {
       }
     case 'w':
       {
-
         image(this.jugadorAtras.get(this.xFrameJugador, this.yFrameJugador, this.anchoFrameJugador, this.altoFrameJugador), posicion.x, posicion.y);
         xFrameFloat +=velocidadFrame*deltaTime;
         if (this.xFrameFloat >= this.nextxFrameFloat) {
@@ -95,7 +93,6 @@ class Sprite {
       }
     case 's':
       {
-
         image(this.jugadorAbajo.get(this.xFrameJugador, this.yFrameJugador, this.anchoFrameJugador, this.altoFrameJugador), posicion.x, posicion.y);
         xFrameFloat +=velocidadFrame*deltaTime;
         if (this.xFrameFloat >= this.nextxFrameFloat) {
