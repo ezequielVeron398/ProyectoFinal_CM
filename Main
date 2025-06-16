@@ -1,70 +1,58 @@
 private Player player;
-private ZombieDistancia enemigo;
-private ZombieMele enemigoA;
-private Utilidades utilidades;
-private PImage fondo;
+private ArrayList<ZombieMele> enemigosA;
+private ArrayList<ZombieDistancia> enemigos;
+//private PImage fondo;
 private boolean w, s, d, a;
-private int tiempoEntreBala,tiempoInicio;
-private ArrayList<Proyectil> balasVomito;
-private ArrayList<Proyectil> balasJugador;
-private boolean toco;
-public float deltaTime;
+private int tiempoInicio;
+private float deltaTime;
 
 public void setup() {
-  size(1024, 1024);
-  this.fondo = loadImage("esenario4.png");
-  player = new Player();
-  enemigo = new ZombieDistancia();
-  enemigoA = new ZombieMele();
-  balasVomito =new ArrayList<Proyectil>();
-  balasVomito =new ArrayList<Proyectil>();
-  utilidades = new Utilidades();
-  this.tiempoEntreBala = 0;
-  toco = false;
-  tiempoInicio = millis();
+  size(1024, 620);
+  //this.fondo = loadImage("esenario4.png");
+  this.player = new Player();
+  this.enemigos = new ArrayList<ZombieDistancia>();
+  this.enemigosA = new ArrayList<ZombieMele>();
+  this.tiempoInicio = millis();
+  for (int i = 0; i < 2; i++) { //crea enemigoDistancia
+    this.enemigos.add(new ZombieDistancia());
+  }
+  for (int i = 0; i < 2; i++) { //crea enemigoMele
+    this.enemigosA.add(new ZombieMele());
+  }
 }
 
 public void  draw() {
-  background(this.fondo);
+  background(100, 200, 100);
+
   int tiempoActual = millis();
-  deltaTime =(tiempoActual - tiempoInicio)/1000.0;
-  tiempoInicio = tiempoActual;
-  player.display();
-  enemigo.display();
-  enemigo.mover(player.getPosicionPlayer(), deltaTime);
-  enemigoA.display();
-  enemigoA.mover(player.getPosicionPlayer(), deltaTime);
-  player.visualizarBalas();
-  toco = utilidades.colisionRectangulos(enemigoA.getPosicion(), enemigoA.getAncho(), enemigoA.getAlto(), enemigo.getPosicion(), enemigo.getAncho(), enemigo.getAlto());
-  //println(toco); // prueba utilidad
-  player.colisionarJugador(balasVomito);
-  player.colisionarEnemigos(enemigo, enemigoA);
-  
-  //agrega BalasMoco
-  tiempoEntreBala++; // un cronometro para que la balaVotime tire cada medio segundo
-  if (tiempoEntreBala >= 60) {
-    balasVomito.add(new BalaVomito(player.getPosicionPlayer(), enemigo.getPosicion().copy()));
-    tiempoEntreBala = 0;
-  }
-  //visualiza  y elimina balaVomito
-  for (int i = balasVomito.size() - 1; i >= 0; i--) {
-    Proyectil bala = balasVomito.get(i);
-    bala.mover();
-    bala.display();
+  this.deltaTime =(tiempoActual - tiempoInicio)/1000.0;
+  this.tiempoInicio = tiempoActual;
 
-    if (bala.posicion.x < 0 || bala.posicion.x > width
-      || bala.posicion.y < 0 || bala.posicion.y > height) {
-      balasVomito.remove(i);
-    }
-  }
+  this.player.display();
+  this.player.usaArma();
+  this.player.mover(w, s, a, d);
+  this.player.recibioDañoDistancia();
 
-  player.moverJugador(w, s, a, d);
+  for (ZombieDistancia enemigo : enemigos) {//colicion  entre la balaVomito y player
+    this.player.colisionarJugadorBala(enemigo.getBalasVomito());
+  }
+  this.player.colisionarEnemigos(this.enemigos, this.enemigosA); //colicon entre BalaJugar y enemigos
+
+
+  for (ZombieDistancia e : enemigos) { //Visualiza ZombieDistancia y dispara
+    e.display();
+    e.mover(player.getPosicionPlayer(), deltaTime);
+    e.disparar();
+  }
+  for (ZombieMele e : enemigosA) {//visualiza ZombieMele
+    e.display();
+    e.mover(player.getPosicionPlayer(), deltaTime);
+  }
 }
 
 public void mousePressed() {
-  player.generarBalas();
+  this.player.recargarBalas();
 }
-
 
 public void keyPressed() {
   if (key == 's' || key == 'S') s = true;
