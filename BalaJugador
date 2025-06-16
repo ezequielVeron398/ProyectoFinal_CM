@@ -1,21 +1,40 @@
-class BalaJugador extends Proyectil{
- private PImage bala;
- 
-  public BalaJugador(PVector player, PVector objetivo){
-     this.posicion = player;
-     this.direccion = PVector.sub(objetivo, player);
-     this.direccion.normalize();
-     this.direccion.mult(super.velocidad);
-     this.bala = loadImage("shoot.png").get(10,0,22,22);
-     this.bala.resize(this.bala.width*2, this.bala.height*2);
-  }
-  
-  public void display(){
+class BalaJugador extends Proyectil {
+  private PImage bala;
+  private Utilidad utilidad;
+  private PVector objetivo;
 
-     image(this.bala, this.posicion.x, this.posicion.y);
-     
+  private int xFrame = 0 ;
+  private int yFrame = 0 ;
+  private int anchoFrame = 27;
+  private int altoFrame = 35;
+  private float xFrameFloat = 0;
+  private float nextxFrameFloat;
+  private float velocidadFrame = 180;
+
+  public BalaJugador(PVector player, PVector objetivo) {
+    this.posicion = player;
+    this.objetivo = objetivo;
+    this.utilidad = new Utilidad();
+    this.direccion = this.utilidad.trayectoria(this.posicion, this.objetivo);
+    this.bala = loadImage("shoot.png");
   }
-  public void mover(){
-    this.posicion.add(direccion);
+
+  public void display() {
+    imageMode(CENTER);
+    image(this.bala.get(this.xFrame, this.yFrame, this.anchoFrame, this.altoFrame), this.posicion.x, this.posicion.y);
+    xFrameFloat +=velocidadFrame*deltaTime; //se ogliba el tiempo entre Frame
+    if (this.xFrameFloat >= this.nextxFrameFloat) {
+      this.xFrame += this.anchoFrame;
+      this.xFrameFloat = 0;
+    }
+    if (this.xFrame >= 4*anchoFrame) {
+      this.xFrame = 0;
+      this.nextxFrameFloat= this.anchoFrame;
+    }
+  }
+
+  public void mover() {
+    this.posicion.x += this.direccion.x*this.velocidad*deltaTime;
+    this.posicion.y += this.direccion.y*this.velocidad*deltaTime;
   }
 }
