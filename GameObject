@@ -1,10 +1,11 @@
-abstract class GameObject{
+abstract class GameObject {
   protected PVector posicion;
   protected float velocidad;
- 
-  public GameObject(){
+
+  public GameObject() {
   }
-  
+
   abstract public void display();
-  abstract public void mover();
+  public void mover() {
+  }
 }
