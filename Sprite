@@ -10,8 +10,8 @@ class Sprite {
   private int yFrame = 0 ;
   private int xFrameJugador = 0;
   private int yFrameJugador = 0;
-  private int anchoFrameEnemigo = 32;
-  private int altoFrameEnemigo = 25;
+  private int anchoFrame = 32;
+  private int altoFrame = 25;
   private int anchoFrameJugador = 32;
   private int altoFrameJugador = 32;
   private float xFrameFloat = 0;
@@ -26,7 +26,7 @@ class Sprite {
     this.jugadorAtras = loadImage("arriba.png");
     this.jugadorAbajo = loadImage("abajo.png");
     this.enemigoAtaca = loadImage("enemigoAtaca.png");
-    this.nextxFrameFloat = anchoFrameEnemigo;
+    this.nextxFrameFloat = anchoFrame;
   }
 
   public void displayEnemigo(char estadoEnemigo, PVector posicion) {
@@ -35,29 +35,29 @@ class Sprite {
 
     case 'q':
       {
-        image(this.enemigo.get(this.xFrame, this.yFrame, this.anchoFrameEnemigo, this.altoFrameEnemigo), posicion.x, posicion.y);
+        image(this.enemigo.get(this.xFrame, this.yFrame, this.anchoFrame, this.altoFrame), posicion.x, posicion.y);
         xFrameFloat +=velocidadFrame*deltaTime;
         if (this.xFrameFloat >= this.nextxFrameFloat) {
-          this.xFrame += this.anchoFrameEnemigo;
+          this.xFrame += this.anchoFrame;
           this.xFrameFloat = 0;
         }
-        if (this.xFrame >= 4*anchoFrameEnemigo) {
+        if (this.xFrame >= 4*anchoFrame) {
           this.xFrame = 0;
-          this.nextxFrameFloat= this.anchoFrameEnemigo;
+          this.nextxFrameFloat= this.anchoFrame;
         }
         break;
       }
     case 'a':
       {
-        image(this.enemigoAtaca.get(this.xFrame, this.yFrame, this.anchoFrameEnemigo, this.altoFrameEnemigo), posicion.x, posicion.y);
+        image(this.enemigoAtaca.get(this.xFrame, this.yFrame, this.anchoFrame, this.altoFrame), posicion.x, posicion.y);
         xFrameFloat +=velocidadFrame*deltaTime;
         if (this.xFrameFloat >= this.nextxFrameFloat) {
-          this.xFrame += this.anchoFrameEnemigo;
+          this.xFrame += this.anchoFrame;
           this.xFrameFloat = 0;
         }
-        if (this.xFrame >= 3*anchoFrameEnemigo) {
+        if (this.xFrame >= 3*anchoFrame) {
           this.xFrame = 0;
-          this.nextxFrameFloat= this.anchoFrameEnemigo;
+          this.nextxFrameFloat= this.anchoFrame;
 
         }
         break;
@@ -81,7 +81,7 @@ class Sprite {
           this.xFrameJugador += this.anchoFrameJugador;
           this.xFrameFloat = 0;
         }
-        if (this.xFrameJugador >= 4*anchoFrameEnemigo) {
+        if (this.xFrameJugador >= 4*anchoFrame) {
           this.nextxFrameFloat= this.anchoFrameJugador;
           this.xFrameJugador = 0;
         }
@@ -92,10 +92,10 @@ class Sprite {
         image(this.jugador.get(this.xFrameJugador, this.yFrameJugador, this.anchoFrameJugador, this.altoFrameJugador), posicion.x, posicion.y);
         xFrameFloat +=velocidadFrame*deltaTime;
         if (this.xFrameFloat >= this.nextxFrameFloat) {
-          this.xFrameJugador += this.anchoFrameEnemigo;
+          this.xFrameJugador += this.anchoFrame;
           this.xFrameFloat = 0;
         }
-        if (this.xFrameJugador >= 4*anchoFrameEnemigo) {
+        if (this.xFrameJugador >= 4*anchoFrame) {
           this.xFrameJugador = 0;
           this.nextxFrameFloat= this.anchoFrameJugador;
         }
@@ -110,7 +110,7 @@ class Sprite {
           this.xFrameJugador += this.anchoFrameJugador;
           this.xFrameFloat = 0;
         }
-        if (this.xFrameJugador >= 5*anchoFrameEnemigo) {
+        if (this.xFrameJugador >= 5*anchoFrame) {
           this.nextxFrameFloat= this.anchoFrameJugador;
           this.xFrameJugador = 0;
         }
@@ -124,24 +124,12 @@ class Sprite {
           this.xFrameJugador += this.anchoFrameJugador;
           this.xFrameFloat = 0;
         }
-        if (this.xFrameJugador >= 3*anchoFrameEnemigo) {
+        if (this.xFrameJugador >= 3*anchoFrame) {
           this.nextxFrameFloat= this.anchoFrameJugador;
           this.xFrameJugador = 0;
         }
         break;
       }
     }
-  }
-    public int getAltoFrameEnemigo(){
-    return altoFrameEnemigo;
-  }
-   public int getAnchoFrameEnemigo(){
-    return anchoFrameEnemigo;
-  }
-   public int getAltoFrameJugador(){
-    return altoFrameJugador;
-  }
-   public int getAnchoFrameJugador(){
-    return anchoFrameJugador;
   }
 }
