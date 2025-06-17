@@ -1,18 +1,20 @@
-class ZombieDistancia extends Enemigo {
+lass ZombieDistancia extends Enemigo {
   private Utilidad utilidades;
   private int colliderZombie;
   private Sprite sprite;
   private ArrayList<Proyectil> balasVomito;
   private int tiempoEntreBala = 0; // cronometro para cada cuanto tira una bala
- private int vida;
+  private int vida;
+  private char estadoEnemigo;
   public ZombieDistancia() {
     this.posicion = new PVector(random(width), random(-10, height+100));
     this.velocidad = 100;
     this.utilidades = new Utilidad();
     this.colliderZombie = 10;
+    this.estadoEnemigo = 'q';
     this.sprite = new Sprite();
     this.balasVomito =new ArrayList<Proyectil>();
-    vida = 10;
+    this.vida = 10;
   }
 
   public void mover(PVector posJugador, float deltaTime) {
@@ -20,22 +22,24 @@ class ZombieDistancia extends Enemigo {
   }
 
   public void display() {
-    sprite.displayEnemigo(this.posicion);
+    sprite.displayEnemigo(this.estadoEnemigo, this.posicion);
   }
-  public boolean recibeDaño(){
+  public boolean recibeDaño() {
     boolean murio=false;
-    vida-= 2;
+    this.vida-= 2;
     println("vida");
-    if(vida <=0) murio = true ;
+    if (vida <=0) murio = true ;
     println(murio);
     return murio;
   }
   public void disparar() {
+    println(estadoEnemigo);
     tiempoEntreBala++; // un cronometro para la balaVotime
-    if (tiempoEntreBala >= 90) {
+    if (tiempoEntreBala >= 120) {
+      this.estadoEnemigo = 'a';
       balasVomito.add(new BalaVomito(player.getPosicionPlayer(), this.posicion.copy())); //agrega BalasMoco
-      tiempoEntreBala = 0; //reinicia el cronometro
-    }
+      tiempoEntreBala = 0;  //reinicia el cronometro
+    } else if (tiempoEntreBala>= 20) this.estadoEnemigo = 'q';
     for (int i = this.balasVomito.size() - 1; i >= 0; i--) {  //visualiza balaVomito
       Proyectil bala = this.balasVomito.get(i);
       bala.mover();
@@ -67,3 +71,4 @@ class ZombieDistancia extends Enemigo {
     return this.balasVomito;
   }
 }
+
