@@ -47,10 +47,12 @@ public void  draw() {
   for (ZombieMele e : enemigosA) {//visualiza ZombieMele
     e.display();
     e.mover(player.getPosicionPlayer(), deltaTime);
+    e.morder(player.getPosicionPlayer(), player.getVidaPlayer());
   }
 }
 
 public void mousePressed() {
+  println(deltaTime );
   this.player.recargarBalas();
 }
 
