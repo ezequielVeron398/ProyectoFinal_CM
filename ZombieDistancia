@@ -1,4 +1,4 @@
-lass ZombieDistancia extends Enemigo {
+class ZombieDistancia extends Enemigo {
   private Utilidad utilidades;
   private int colliderZombie;
   private Sprite sprite;
