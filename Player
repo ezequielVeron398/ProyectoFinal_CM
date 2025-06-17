@@ -23,6 +23,10 @@ class Player extends GameObject {
   public PVector getPosicionPlayer() {
     return this.posicion;
   }
+  public float getVidaPlayer(){
+    return vidaJugador;
+  
+  }
 
   public void recargarBalas() {
     this.arma.generarBalas();
@@ -99,12 +103,13 @@ class Player extends GameObject {
   }
   public void recibioDañoDistancia() {
     if (dañoAJugador) {
-
       float dañoBalaVomito = vomito.getDaño();
-      this.vidaJugador =utilidad.recibeDaño(vidaJugador, dañoBalaVomito);
-      println(vidaJugador);
+      this.vidaJugador = utilidad.recibeDaño(vidaJugador, dañoBalaVomito);
+      //println(vidaJugador);
       this.dañoAJugador = false;
-      if (vidaJugador == 0) println("Jugador murio");
+      if (vidaJugador == 0); //println("Jugador murio");
     }
+  }
+  public void recibioDañoMele(){
   }
 }
