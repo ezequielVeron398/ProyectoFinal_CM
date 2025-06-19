@@ -1,23 +1,7 @@
 class Sprite {
-  private PImage enemigo;
-  private PImage enemigoAtaca;
-  private PImage jugador;
-  private PImage jugadorIzq;
-  private PImage jugadorAtras;
-  private PImage jugadorAbajo;
-
-  private int xFrame = 0;
-  private int yFrame = 0 ;
-  private int xFrameJugador = 0;
-  private int yFrameJugador = 0;
-  private int anchoFrame = 32;
-  private int altoFrame = 25;
-  private int anchoFrameJugador = 32;
-  private int altoFrameJugador = 32;
-  private float xFrameFloat = 0;
-  private float nextxFrameFloat;
-  private float velocidadFrame = 200;
-
+  private PImage enemigo, enemigoAtaca, jugador, jugadorIzq, jugadorAtras, jugadorAbajo;
+  private int xFrame = 0, yFrame, xFrameJugador, yFrameJugador, anchoFrameEnemigo, altoFrameEnemigo, anchoFrameJugador, altoFrameJugador;
+  private float xFrameFloat, nextxFrameFloat, velocidadFrame;
   public Sprite() {
     imageMode(CENTER);
     this.enemigo = loadImage("slime.png");
@@ -26,39 +10,47 @@ class Sprite {
     this.jugadorAtras = loadImage("arriba.png");
     this.jugadorAbajo = loadImage("abajo.png");
     this.enemigoAtaca = loadImage("enemigoAtaca.png");
-    this.nextxFrameFloat = anchoFrame;
+    this.xFrame = 0;
+    this.yFrame = 0;
+    this.xFrameJugador = 0;
+    this.yFrameJugador = 0;
+    this.anchoFrameEnemigo = 32;
+    this.altoFrameEnemigo = 25;
+    this.anchoFrameJugador = 32;
+    this.altoFrameJugador = 32;
+    this.xFrameFloat = 0;
+    this.nextxFrameFloat = anchoFrameEnemigo;
+    this.velocidadFrame = 200;
   }
 
   public void displayEnemigo(char estadoEnemigo, PVector posicion) {
-    
     switch(estadoEnemigo) {
 
     case 'q':
       {
-        image(this.enemigo.get(this.xFrame, this.yFrame, this.anchoFrame, this.altoFrame), posicion.x, posicion.y);
+        image(this.enemigo.get(this.xFrame, this.yFrame, this.anchoFrameEnemigo, this.altoFrameEnemigo), posicion.x, posicion.y);
         xFrameFloat +=velocidadFrame*deltaTime;
         if (this.xFrameFloat >= this.nextxFrameFloat) {
-          this.xFrame += this.anchoFrame;
+          this.xFrame += this.anchoFrameEnemigo;
           this.xFrameFloat = 0;
         }
-        if (this.xFrame >= 4*anchoFrame) {
+        if (this.xFrame >= 4*anchoFrameEnemigo) {
           this.xFrame = 0;
-          this.nextxFrameFloat= this.anchoFrame;
+          this.nextxFrameFloat= this.anchoFrameEnemigo;
         }
         break;
       }
     case 'a':
       {
-        image(this.enemigoAtaca.get(this.xFrame, this.yFrame, this.anchoFrame, this.altoFrame), posicion.x, posicion.y);
+        image(this.enemigoAtaca.get(this.xFrame, this.yFrame, this.anchoFrameEnemigo, this.altoFrameEnemigo), posicion.x, posicion.y);
         xFrameFloat +=velocidadFrame*deltaTime;
         if (this.xFrameFloat >= this.nextxFrameFloat) {
-          this.xFrame += this.anchoFrame;
+          this.xFrame += this.anchoFrameEnemigo;
           this.xFrameFloat = 0;
         }
-        if (this.xFrame >= 3*anchoFrame) {
+        if (this.xFrame >= 3*anchoFrameEnemigo) {
           this.xFrame = 0;
-          this.nextxFrameFloat= this.anchoFrame;
-
+          this.nextxFrameFloat= this.anchoFrameEnemigo;
         }
         break;
       }
@@ -81,7 +73,7 @@ class Sprite {
           this.xFrameJugador += this.anchoFrameJugador;
           this.xFrameFloat = 0;
         }
-        if (this.xFrameJugador >= 4*anchoFrame) {
+        if (this.xFrameJugador >= 4*anchoFrameEnemigo) {
           this.nextxFrameFloat= this.anchoFrameJugador;
           this.xFrameJugador = 0;
         }
@@ -92,10 +84,10 @@ class Sprite {
         image(this.jugador.get(this.xFrameJugador, this.yFrameJugador, this.anchoFrameJugador, this.altoFrameJugador), posicion.x, posicion.y);
         xFrameFloat +=velocidadFrame*deltaTime;
         if (this.xFrameFloat >= this.nextxFrameFloat) {
-          this.xFrameJugador += this.anchoFrame;
+          this.xFrameJugador += this.anchoFrameEnemigo;
           this.xFrameFloat = 0;
         }
-        if (this.xFrameJugador >= 4*anchoFrame) {
+        if (this.xFrameJugador >= 4*anchoFrameEnemigo) {
           this.xFrameJugador = 0;
           this.nextxFrameFloat= this.anchoFrameJugador;
         }
@@ -110,7 +102,7 @@ class Sprite {
           this.xFrameJugador += this.anchoFrameJugador;
           this.xFrameFloat = 0;
         }
-        if (this.xFrameJugador >= 5*anchoFrame) {
+        if (this.xFrameJugador >= 5*anchoFrameEnemigo) {
           this.nextxFrameFloat= this.anchoFrameJugador;
           this.xFrameJugador = 0;
         }
@@ -124,12 +116,24 @@ class Sprite {
           this.xFrameJugador += this.anchoFrameJugador;
           this.xFrameFloat = 0;
         }
-        if (this.xFrameJugador >= 3*anchoFrame) {
-          this.nextxFrameFloat= this.anchoFrameJugador;
+        if (this.xFrameJugador >= 3*anchoFrameEnemigo) {
+          this.nextxFrameFloat = this.anchoFrameJugador;
           this.xFrameJugador = 0;
         }
         break;
       }
     }
+  }
+  public int getAltoFrameEnemigo() {
+    return altoFrameEnemigo;
+  }
+  public int getAnchoFrameEnemigo() {
+    return anchoFrameEnemigo;
+  }
+  public int getAltoFrameJugador() {
+    return altoFrameJugador;
+  }
+  public int getAnchoFrameJugador() {
+    return anchoFrameJugador;
   }
 }
