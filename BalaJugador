@@ -1,22 +1,21 @@
 class BalaJugador extends Proyectil {
   private PImage bala;
-  private Utilidad utilidad;
   private PVector objetivo;
+  private int xFrame, yFrame, anchoFrame, altoFrame;
+  private float xFrameFloat, nextxFrameFloat, velocidadFrame;
 
-  private int xFrame = 0 ;
-  private int yFrame = 0 ;
-  private int anchoFrame = 27;
-  private int altoFrame = 35;
-  private float xFrameFloat = 0;
-  private float nextxFrameFloat;
-  private float velocidadFrame = 180;
 
   public BalaJugador(PVector player, PVector objetivo) {
     this.posicion = player;
     this.objetivo = objetivo;
-    this.utilidad = new Utilidad();
-    this.direccion = this.utilidad.trayectoria(this.posicion, this.objetivo);
+    this.direccion = Utilidad.trayectoria(this.posicion, this.objetivo);
     this.bala = loadImage("shoot.png");
+    this.xFrame = 0;
+    this.yFrame = 0;
+    this.anchoFrame = 27;
+    this.altoFrame = 35;
+    this.xFrameFloat = 0;
+    this.velocidadFrame = 180;
   }
 
   public void display() {
