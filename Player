@@ -4,9 +4,8 @@ class Player extends GameObject {
   private int radioCollider;
   private Arma arma;
   private float vidaJugador;
-  private Utilidad utilidad;
   private boolean dañoAJugador;
-  private BalaVomito vomito;
+
 
   public Player() {
     this.posicion = new PVector(width/2, height/2);
@@ -16,9 +15,8 @@ class Player extends GameObject {
     this.arma = new Arma(this.posicion);
     this.radioCollider = 12;
     this.vidaJugador = 100;
-    this.utilidad = new Utilidad();
     this.dañoAJugador = false;
-    this.vomito = new BalaVomito(this.posicion, this.posicion);
+   
   }
   public PVector getPosicionPlayer() {
     return this.posicion;
@@ -103,13 +101,14 @@ class Player extends GameObject {
   }
   public void recibioDañoDistancia() {
     if (dañoAJugador) {
-      float dañoBalaVomito = vomito.getDaño();
-      this.vidaJugador = utilidad.recibeDaño(vidaJugador, dañoBalaVomito);
-      //println(vidaJugador);
+      
+      this.vidaJugador = Utilidad.recibeDaño(vidaJugador, Utilidad.DAÑO_VOMITO);
+      println(vidaJugador);
       this.dañoAJugador = false;
       if (vidaJugador == 0); //println("Jugador murio");
     }
   }
   public void recibioDañoMele(){
-  }
-}
+  }} 
+  
+  
