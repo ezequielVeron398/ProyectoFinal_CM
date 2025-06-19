@@ -1,9 +1,9 @@
-class Utilidad {
-
+static class Utilidad {
+  public static final float DAÑO_VOMITO = 10;
   Utilidad() {
   }
 
-  public void movimientoEnemigo(PVector posInicial, PVector posFinal, float velocidad, float distanciaMinima, float deltaTime) {
+  public static void movimientoEnemigo(PVector posInicial, PVector posFinal, float velocidad, float distanciaMinima, float deltaTime) {
     float distanciaX = posFinal.x - posInicial.x;
     float distanciaY = posFinal.y - posInicial.y;
     float distancia = sqrt(distanciaX * distanciaX + distanciaY * distanciaY);
@@ -16,7 +16,7 @@ class Utilidad {
     }
   }
 
-  private boolean colisionRectangulos(PVector posA, float anchoA, float alturaA, PVector posB, float anchoB, float alturaB) {
+  private static boolean colisionRectangulos(PVector posA, float anchoA, float alturaA, PVector posB, float anchoB, float alturaB) {
 
     float distanciaX = posA.x - posB.x;
     float distanciaY = posA.y - posB.y;
@@ -30,15 +30,13 @@ class Utilidad {
       distanciaY < (alturaA / 2 + alturaB / 2);
   }
 
-  public PVector trayectoria(PVector player, PVector objetivo) {
-    PVector distancia = new PVector(objetivo.x - player.x, objetivo.y - player.y);
+  public static PVector trayectoria(PVector posInicial, PVector posFinal) {
+    PVector distancia = new PVector(posFinal.x - posInicial.x, posFinal.y - posInicial.y);
     float hipotenusa = sqrt(distancia.x * distancia.x + distancia.y * distancia.y);
     PVector movimiento = new PVector(distancia.x/hipotenusa, distancia.y/hipotenusa);
     return  movimiento;
   }
-  public float recibeDaño(float vida, float daño){
-    
-    
+  public static float recibeDaño(float vida, float daño){
     return vida - daño;
   }
 }
