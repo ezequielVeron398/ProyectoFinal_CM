@@ -1,16 +1,12 @@
 class ZombieMele extends Enemigo {
-  private Utilidad utilidades;
   private float ancho, alto, daño;
   private int colliderZombie;
   private Sprite sprite;
 
-
-
-
   public ZombieMele() {
     this.posicion = new PVector( random(600, width), random(height));
     this.velocidad = 100;
-    this.utilidades = new Utilidad();
+
     this.ancho = 30;
     this.alto = 30;
     this.colliderZombie = 10;
@@ -19,11 +15,11 @@ class ZombieMele extends Enemigo {
   }
 
   public void mover(PVector posJugador, float deltaTime) {
-    utilidades.movimientoEnemigo(this.posicion, posJugador, this.velocidad, 25, deltaTime);
+    Utilidad.movimientoEnemigo(this.posicion, posJugador, this.velocidad, 25, deltaTime);
   }
 
   public void display() {
-    sprite.displayEnemigo('q',this.posicion);
+    sprite.displayEnemigo('q', this.posicion);
   }
 
 
@@ -46,11 +42,10 @@ class ZombieMele extends Enemigo {
     this.posicion = new PVector(random(500, width), random(500, height));
   }
   public void morder(PVector posJugador, float vidaJugador) {
-    boolean mordio = utilidades.colisionRectangulos(this.posicion, sprite.getAnchoFrameEnemigo(), sprite.getAltoFrameEnemigo(), posJugador, sprite.getAltoFrameJugador(), sprite.getAnchoFrameJugador());
+    boolean mordio = Utilidad.colisionRectangulos(this.posicion, sprite.getAnchoFrameEnemigo(), sprite.getAltoFrameEnemigo(), posJugador, sprite.getAltoFrameJugador(), sprite.getAnchoFrameJugador());
     if (mordio) {
       //println(utilidades.recibeDaño(vidaJugador, daño));
       //println(mordio);
-     
     }
     //println(mordio);
   }
