@@ -5,6 +5,9 @@ class Player extends GameObject {
   private Arma arma;
   private float vidaJugador;
   private boolean dañoAJugador;
+  private int tiempoUltimoDañoMele;
+  private int cooldownDañoMele = 2000; // en milisegundos
+
 
 
   public Player() {
@@ -16,14 +19,13 @@ class Player extends GameObject {
     this.radioCollider = 12;
     this.vidaJugador = 100;
     this.dañoAJugador = false;
-   
+    this.cooldownDañoMele = 2000;
   }
   public PVector getPosicionPlayer() {
     return this.posicion;
   }
-  public float getVidaPlayer(){
+  public float getVidaPlayer() {
     return vidaJugador;
-  
   }
 
   public void recargarBalas() {
@@ -101,14 +103,28 @@ class Player extends GameObject {
   }
   public void recibioDañoDistancia() {
     if (dañoAJugador) {
-      
+
       this.vidaJugador = Utilidad.recibeDaño(vidaJugador, Utilidad.DAÑO_VOMITO);
       println(vidaJugador);
       this.dañoAJugador = false;
       if (vidaJugador == 0); //println("Jugador murio");
     }
   }
-  public void recibioDañoMele(){
-  }} 
-  
-  
+  public void recibioDañoMele(PVector posZombieMele) {
+  int ahora = millis();
+  if (Utilidad.colisionRectangulos(
+        this.posicion,
+        sprite.getAnchoFrameJugador(),
+        sprite.getAltoFrameJugador(),
+        posZombieMele,
+        sprite.getAnchoFrameEnemigo(),
+        sprite.getAltoFrameEnemigo()
+      ) && ahora - tiempoUltimoDañoMele > cooldownDañoMele) {
+    
+    this.vidaJugador = Utilidad.recibeDaño(vidaJugador, Utilidad.DAÑO_MELE); 
+    println("¡Mordida! Vida actual: " + vidaJugador);
+    tiempoUltimoDañoMele = ahora;
+  }
+}
+
+}
