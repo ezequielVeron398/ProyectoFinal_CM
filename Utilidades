@@ -1,5 +1,6 @@
 static class Utilidad {
   public static final float DAÑO_VOMITO = 10;
+  public static final float DAÑO_MELE = 15;
   Utilidad() {
   }
 
