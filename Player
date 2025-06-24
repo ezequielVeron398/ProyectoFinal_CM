@@ -5,10 +5,6 @@ class Player extends GameObject {
   private Arma arma;
   private float vidaJugador;
   private boolean dañoAJugador;
-  private int tiempoUltimoDañoMele;
-  private int cooldownDañoMele = 2000; // en milisegundos
-
-
 
   public Player() {
     this.posicion = new PVector(width/2, height/2);
@@ -19,7 +15,6 @@ class Player extends GameObject {
     this.radioCollider = 12;
     this.vidaJugador = 100;
     this.dañoAJugador = false;
-    this.cooldownDañoMele = 2000;
   }
   public PVector getPosicionPlayer() {
     return this.posicion;
@@ -66,65 +61,92 @@ class Player extends GameObject {
       float d = bala.posicion.dist(this.posicion);
 
       if (d < (this.radioCollider + ((BalaVomito) bala).colliderVomito)) {
-        //println("Hay colision");
+
         dañoAJugador = true;
 
         balasVomito.remove(i);
       }
     }
   }
-  public void colisionarEnemigos(ArrayList<ZombieDistancia> enemigos, ArrayList<ZombieMele> enemigosA) {
+  public void colisionarEnemigos(ArrayList<ZombieDistancia> zombiesDistancia, ArrayList<ZombieMele> zombiesMele, ZombieJefe zombieJefe) {
     for (int i = this.arma.balasJugador.size() - 1; i >= 0; i--) {
-      Proyectil bala = arma.balasJugador.get(i);
       boolean colisiono = false;
-      for (int j =0; j < enemigos.size(); j++) {
-        ZombieDistancia enemigo = enemigos.get(j);
-        float d = bala.posicion.dist(enemigo.getPosicionEnemigo());
-        if (d < 10 + enemigo.getRadioColision()) {
+      for (int j =0; j < zombiesDistancia.size(); j++) {
+        if (arma.balasJugador.get(i).posicion.dist(zombiesDistancia.get(j).getPosicion()) < 10 + zombiesDistancia.get(j).getRadioColision()) {
           this.arma.balasJugador.remove(i);
-          //enemigo.reaparecer();
-          if (enemigo.recibeDaño()) enemigos.remove(j) ;
-
+          if (zombiesDistancia.get(j).recibeDaño()) zombiesDistancia.remove(j);
           colisiono = true;
           break;
         }
       }
       if (colisiono) continue;
-
-      for (ZombieMele enemigo : enemigosA) {
-        float d = bala.posicion.dist(enemigo.getPosicionEnemigo());
-        if (d < 10 + enemigo.getRadioColision()) {
+      for (int j =0; j < zombiesMele.size(); j++) {
+        if (arma.balasJugador.get(i).posicion.dist(zombiesMele.get(j).getPosicion()) < 10 + zombiesMele.get(j).getRadioColision()) {
           this.arma.balasJugador.remove(i);
-          enemigo.reaparecer();
+          if (zombiesMele.get(j).recibeDaño()) zombiesMele.remove(j);
+          //zombiesMele.get(j).empujar();
+          colisiono = true;
           break;
         }
       }
+      if (colisiono) continue;
+      if (zombieJefe != null &&
+        arma.balasJugador.get(i).posicion.dist(zombieJefe.getPosicion()) < 10 + zombieJefe.getRadioColision()) {
+
+        this.arma.balasJugador.remove(i);
+        if (zombieJefe.recibeDaño()) zombieJefe = null;
+        break;
+      }
     }
   }
+
   public void recibioDañoDistancia() {
     if (dañoAJugador) {
 
-      this.vidaJugador = Utilidad.recibeDaño(vidaJugador, Utilidad.DAÑO_VOMITO);
-      println(vidaJugador);
+      this.vidaJugador -= Utilidad.DAÑO_VOMITO;
       this.dañoAJugador = false;
-      if (vidaJugador == 0); //println("Jugador murio");
+      if (vidaJugador == 0);
     }
   }
-  public void recibioDañoMele(PVector posZombieMele) {
-  int ahora = millis();
-  if (Utilidad.colisionRectangulos(
-        this.posicion,
-        sprite.getAnchoFrameJugador(),
-        sprite.getAltoFrameJugador(),
-        posZombieMele,
-        sprite.getAnchoFrameEnemigo(),
-        sprite.getAltoFrameEnemigo()
-      ) && ahora - tiempoUltimoDañoMele > cooldownDañoMele) {
-    
-    this.vidaJugador = Utilidad.recibeDaño(vidaJugador, Utilidad.DAÑO_MELE); 
-    println("¡Mordida! Vida actual: " + vidaJugador);
-    tiempoUltimoDañoMele = ahora;
-  }
-}
+  public void recibioDañoMele(ZombieMele zombieMele) {
+    int ahora = millis();
+    int ultimo = zombieMele.getTiempoUltimoDañoMele();
 
+    if (Utilidad.colisionRectangulos(
+      this.posicion,
+      sprite.getAnchoFrameJugador(),
+      sprite.getAltoFrameJugador(),
+      zombieMele.getPosicion(),
+      sprite.getAnchoFrameEnemigo(),
+      sprite.getAltoFrameEnemigo()
+      ) && ahora - ultimo > zombieMele.getCooldownDañoMele()) {
+      this.vidaJugador -= Utilidad.DAÑO_MELE;
+      zombieMele.setTiempoUltimoDañoMele(ahora); 
+    }
+  }
+  
+/*   public void recibioDañoJefe(ZombieJefe zombieJefe) {
+    int ahora = millis();
+    int ultimo = zombieJefe.getTiempoUltimoDañoJefe();
+
+    if (Utilidad.colisionRectangulos(
+      this.posicion,
+      sprite.getAnchoFrameJugador(),
+      sprite.getAltoFrameJugador(),
+      zombieJefe.getPosicion(),
+      sprite.getAnchoFrameEnemigo(),
+      sprite.getAltoFrameEnemigo()
+      ) && ahora - ultimo > zombieJefe.getCooldownDañoJefe()) {
+      this.vidaJugador -= Utilidad.DAÑO_JEFE;
+      zombieJefe.setTiempoUltimoDañoJefe(ahora); 
+    }
+  }
+    public void recibioDañoDistanciaJefe() {
+    if (dañoAJugador) {
+
+      this.vidaJugador -= Utilidad.DAÑO_JEFE;
+      this.dañoAJugador = false;
+      if (vidaJugador == 0);
+    }
+}*/
 }
