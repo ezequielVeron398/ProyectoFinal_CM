@@ -1,1 +1,72 @@
+class ZombieJefe extends Enemigo {
+  private int colliderZombie, tiempoEntreBala, cooldownDañoJefe, tiempoUltimoDañoJefe, vida;
+  private ArrayList<Proyectil> balasVomito;
+  private Sprite sprite;
+  private char estadoEnemigo;
 
+  public ZombieJefe() {
+    this.posicion = new PVector(random(width), random(height));
+    this.velocidad = 50;
+    this.colliderZombie = 10;
+    this.estadoEnemigo = 'q';
+    this.sprite = new Sprite();
+    this.balasVomito = new ArrayList<Proyectil>();
+    this.vida = 2;
+    this.tiempoEntreBala = 0;
+    this.cooldownDañoJefe = 2000;
+    this.tiempoUltimoDañoJefe = 0;
+    this.sprite = new Sprite();
+  }
+
+  public void mover(PVector posJugador, float deltaTime) {
+    Utilidad.movimientoEnemigo(this.posicion, posJugador, this.velocidad, 0, deltaTime);
+  }
+
+  public void display() {
+
+    sprite.displayEnemigo(this.estadoEnemigo, this.posicion);
+  }
+  public void disparar() {
+    tiempoEntreBala++; // un cronometro para la balaVotime
+    if (tiempoEntreBala >= 50) {
+      this.estadoEnemigo = 'a';
+      balasVomito.add(new BalaVomito(player.getPosicionPlayer(), this.posicion.copy())); //agrega BalasMoco
+      tiempoEntreBala = 0;  //reinicia el cronometro
+    } else if (tiempoEntreBala>= 20) this.estadoEnemigo = 'q';
+    for (int i = this.balasVomito.size() - 1; i >= 0; i--) {  //visualiza balaVomito
+      Proyectil bala = this.balasVomito.get(i);
+      bala.mover();
+      bala.display();
+
+      if (bala.posicion.x < 0 || bala.posicion.x > width //elimina bala
+        || bala.posicion.y < 0 || bala.posicion.y > height) {
+        balasVomito.remove(i);
+      }
+    }
+  }
+  public boolean recibeDaño() {
+    boolean murio=false;
+    this.vida-= 2;
+    if (vida <=0) murio = true ;
+
+    return murio;
+  }
+  public PVector getPosicion() {
+    return posicion;
+  }
+  public int getRadioColision() {
+    return this.colliderZombie;
+  }
+  public int getVida() {
+    return vida;
+  }
+  public int getCooldownDañoJefe() {
+    return this.cooldownDañoJefe;
+  }
+  public int getTiempoUltimoDañoJefe() {
+    return this.tiempoUltimoDañoJefe;
+  }
+  public void setTiempoUltimoDañoJefe(int tiempo) {
+    this.tiempoUltimoDañoJefe = tiempo;
+  }
+}
