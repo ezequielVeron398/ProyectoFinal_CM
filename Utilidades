@@ -1,6 +1,7 @@
 static class Utilidad {
   public static final float DAÑO_VOMITO = 10;
   public static final float DAÑO_MELE = 15;
+  public static final float DAÑO_JEFE = 25;
   Utilidad() {
   }
 
@@ -36,8 +37,5 @@ static class Utilidad {
     float hipotenusa = sqrt(distancia.x * distancia.x + distancia.y * distancia.y);
     PVector movimiento = new PVector(distancia.x/hipotenusa, distancia.y/hipotenusa);
     return  movimiento;
-  }
-  public static float recibeDaño(float vida, float daño){
-    return vida - daño;
   }
 }
