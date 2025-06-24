@@ -4,7 +4,6 @@ class BalaJugador extends Proyectil {
   private int xFrame, yFrame, anchoFrame, altoFrame;
   private float xFrameFloat, nextxFrameFloat, velocidadFrame;
 
-
   public BalaJugador(PVector player, PVector objetivo) {
     this.posicion = player;
     this.objetivo = objetivo;
