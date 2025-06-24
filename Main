@@ -1,72 +1,235 @@
 private Player player;
-private ArrayList<ZombieMele> enemigosA;
-private ArrayList<ZombieDistancia> enemigos;
-//private PImage fondo;
+private ZombieJefe zombieJefe;
+private ArrayList<ZombieMele> zomiesMele;
+private ArrayList<ZombieDistancia> zombiesDistancia;
 private boolean w, s, d, a;
 private int tiempoInicio;
 private float deltaTime;
+private int estadoActual = MaquinaEstados.MENU;
+private PFont fuente;
 
 public void setup() {
   size(1024, 620);
-  //this.fondo = loadImage("esenario4.png");
-  this.player = new Player();
-  this.enemigos = new ArrayList<ZombieDistancia>();
-  this.enemigosA = new ArrayList<ZombieMele>();
-  this.tiempoInicio = millis();
-  for (int i = 0; i < 2; i++) { //crea enemigoDistancia
-    this.enemigos.add(new ZombieDistancia());
-  }
-  for (int i = 0; i < 2; i++) { //crea enemigoMele
-    this.enemigosA.add(new ZombieMele());
-  }
+  fuente = createFont("Bahnschrift", 32);
 }
 
-public void  draw() {
-  background(100, 200, 100);
+public void draw() {
+  background(50);
+  switch (estadoActual) {
+  case MaquinaEstados.MENU:
+    mostrarMenu();
+    break;
+  case MaquinaEstados.NIVEL_1:
+    ejecutarNivel1();
+    break;
+  case MaquinaEstados.NIVEL_2:
+    ejecutarNivel2();
+    break;
 
-  int tiempoActual = millis();
-  this.deltaTime =(tiempoActual - tiempoInicio)/1000.0;
-  this.tiempoInicio = tiempoActual;
-
-  this.player.display();
-  this.player.usaArma();
-  this.player.mover(w, s, a, d);
-  this.player.recibioDañoDistancia();
-
-  for (ZombieDistancia enemigo : enemigos) {//colicion  entre la balaVomito y player
-    this.player.colisionarJugadorBala(enemigo.getBalasVomito());
-  }
-  this.player.colisionarEnemigos(this.enemigos, this.enemigosA); //colicon entre BalaJugar y enemigos
-
-
-  for (ZombieDistancia e : enemigos) { //Visualiza ZombieDistancia y dispara
-    e.display();
-    e.mover(player.getPosicionPlayer(), deltaTime);
-    e.disparar();
-  }
-  for (ZombieMele e : enemigosA) {//visualiza ZombieMele
-    e.display();
-    e.mover(player.getPosicionPlayer(), deltaTime);
-    this.player.recibioDañoMele(e.getPosicion());
-   
+  case MaquinaEstados.OPCIONES:
+    mostrarOpciones();
+    break;
+  case MaquinaEstados.GAME_OVER:
+    mostrarGameOver();
+    break;
   }
 }
-
 public void mousePressed() {
-  println(deltaTime );
-  this.player.recargarBalas();
+  if (estadoActual == MaquinaEstados.MENU) {
+    if (mouseX > width/2 - 100 && mouseX < width/2 + 100 &&
+      mouseY > height/2 - 30 && mouseY < height/2 + 30) {
+      iniciarJuego();
+    }
+
+    if (mouseX > width/2 - 100 && mouseX < width/2 + 100 &&
+      mouseY > height/2 + 70 && mouseY < height/2 + 130) {
+      estadoActual = MaquinaEstados.OPCIONES;
+    }
+  }
+
+  if (estadoActual == MaquinaEstados.NIVEL_1 || estadoActual == MaquinaEstados.NIVEL_2) {
+    player.recargarBalas();
+  }
+  if (estadoActual == MaquinaEstados.GAME_OVER) {
+    estadoActual = MaquinaEstados.MENU;
+  }
 }
+
 
 public void keyPressed() {
-  if (key == 's' || key == 'S') s = true;
-  if (key == 'w' || key == 'W') w = true;
-  if (key == 'a' || key == 'A') a = true;
-  if (key == 'd' || key == 'D') d = true;
+  if (key == ESC) {
+    if (estadoActual == MaquinaEstados.OPCIONES) {
+      estadoActual = MaquinaEstados.MENU;
+      key = 0;
+    }
+  }
+
+  if (estadoActual == MaquinaEstados.NIVEL_1 || estadoActual == MaquinaEstados.NIVEL_2 ) {
+    if (key == 's' || key == 'S') s = true;
+    if (key == 'w' || key == 'W') w = true;
+    if (key == 'a' || key == 'A') a = true;
+    if (key == 'd' || key == 'D') d = true;
+  }
 }
 
 public void keyReleased() {
-  if (key == 's' || key == 'S') s = false;
-  if (key == 'w' || key == 'W') w = false;
-  if (key == 'a' || key == 'A') a = false;
-  if (key == 'd' || key == 'D') d = false;
+  if (estadoActual == MaquinaEstados.NIVEL_1 || estadoActual == MaquinaEstados.NIVEL_2) {
+    if (key == 's' || key == 'S') s = false;
+    if (key == 'w' || key == 'W') w = false;
+    if (key == 'a' || key == 'A') a = false;
+    if (key == 'd' || key == 'D') d = false;
+  }
+}
+
+public void mostrarMenu() {
+  textFont(fuente);
+  fill(255);
+  textAlign(CENTER, CENTER);
+  text("CARGA MORTAL DEMO", width/2, height/4);
+  rectMode(CENTER);
+  fill(255, 0, 0);
+  rect(width/2, height/2, 200, 60);
+  fill(255);
+  text("Iniciar Juego", width/2, height/2);
+  fill(50, 100, 200);
+  rect(width/2, height/2 + 100, 200, 60);
+  fill(255);
+  text("Opciones", width/2, height/2 + 100);
+}
+
+public void mostrarOpciones() {
+  background(40);
+  textFont(fuente);
+  fill(255);
+  textAlign(CENTER, CENTER);
+  text("Sonido", width / 2, height / 2);
+  textSize(16);
+  text("Presiona ESC para volver", width / 2, height - 40);
+}
+
+public void iniciarJuego() {
+  estadoActual = MaquinaEstados.NIVEL_1;
+
+  player = new Player();
+  zombiesDistancia = new ArrayList<ZombieDistancia>();
+  zomiesMele = new ArrayList<ZombieMele>();
+  tiempoInicio = millis();
+
+  for (int i = 0; i < 1; i++) {
+    zombiesDistancia.add(new ZombieDistancia());
+    zomiesMele.add(new ZombieMele());
+  }
+}
+public void ejecutarNivel1() {
+  background(100, 200, 100);
+
+  int tiempoActual = millis();
+  deltaTime = (tiempoActual - tiempoInicio) / 1000.0;
+  tiempoInicio = tiempoActual;
+
+  player.display();
+  player.usaArma();
+  player.mover(w, s, a, d);
+  player.recibioDañoDistancia();
+  player.colisionarEnemigos(zombiesDistancia, zomiesMele, zombieJefe);
+
+  for (int i = 0; i < zombiesDistancia.size(); i++) {
+
+    zombiesDistancia.get(i).display();
+    zombiesDistancia.get(i).mover(player.getPosicionPlayer(), deltaTime);
+    zombiesDistancia.get(i).disparar();
+    player.colisionarJugadorBala(zombiesDistancia.get(i).getBalasVomito());
+  }
+
+  for (int i = 0; i < zomiesMele.size(); i++) {
+
+    zomiesMele.get(i).display();
+    zomiesMele.get(i).mover(player.getPosicionPlayer(), deltaTime);
+    player.recibioDañoMele(zomiesMele.get(i));
+  }
+
+  if (player.getVidaPlayer() <= 0) {
+    estadoActual = MaquinaEstados.GAME_OVER;
+  }
+
+  if (zombiesDistancia.size() == 0 && zomiesMele.size() == 0) {
+    iniciarNivel2();
+  }
+}
+public void iniciarNivel2() {
+  estadoActual = MaquinaEstados.NIVEL_2;
+
+  zombiesDistancia = new ArrayList<ZombieDistancia>();
+  zomiesMele = new ArrayList<ZombieMele>();
+  zombieJefe = new ZombieJefe();
+
+
+  for (int i = 0; i < 0; i++) {
+    zombiesDistancia.add(new ZombieDistancia());
+  }
+
+  for (int i = 0; i < 0; i++) {
+    zomiesMele.add(new ZombieMele());
+  }
+
+  println("¡Comienza el Nivel 2!");
+}
+public void ejecutarNivel2() {
+  background(50, 100, 150);
+
+  int tiempoActual = millis();
+  deltaTime = (tiempoActual - tiempoInicio) / 1000.0;
+  tiempoInicio = tiempoActual;
+
+  player.display();
+  player.usaArma();
+  player.mover(w, s, a, d);
+  player.recibioDañoDistancia();
+  player.colisionarEnemigos(zombiesDistancia, zomiesMele, zombieJefe);
+
+  if (zombieJefe.getVida() >=0) {
+    zombieJefe.display();
+    zombieJefe.mover(player.getPosicionPlayer(), deltaTime);
+    zombieJefe.disparar();
+    //player.recibioDañoJefe(zombieJefe);
+    //player.recibioDañoDistanciaJefe();
+  }
+
+  for (int i = 0; i < zombiesDistancia.size(); i++) {
+
+    zombiesDistancia.get(i).display();
+    zombiesDistancia.get(i).mover(player.getPosicionPlayer(), deltaTime);
+    zombiesDistancia.get(i).disparar();
+    player.colisionarJugadorBala(zombiesDistancia.get(i).getBalasVomito());
+  }
+
+  for (int i = 0; i < zomiesMele.size(); i++) {
+
+    zomiesMele.get(i).display();
+    zomiesMele.get(i).mover(player.getPosicionPlayer(), deltaTime);
+    player.recibioDañoMele(zomiesMele.get(i));
+  }
+
+
+  if (player.getVidaPlayer() <= 0) {
+    estadoActual = MaquinaEstados.GAME_OVER;
+  }
+
+  if (zombiesDistancia.size() == 0 && zomiesMele.size() == 0 && zombieJefe == null) {
+    println("¡Ganaste el juego!");
+    estadoActual = MaquinaEstados.MENU;
+  }
+}
+
+
+public void mostrarGameOver() {
+  background(0);
+  fill(255, 0, 0);
+  textFont(fuente);
+  textAlign(CENTER);
+  text("GAME OVER", width/2, height/2-100);
+  text("PERDISTE POR PT", width/2, height/2-40);
+  fill(255);
+  textSize(20);
+  text("Haz click para volver al menu", width/2, height/2+220);
 }
