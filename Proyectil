@@ -3,7 +3,6 @@ abstract class Proyectil extends GameObject {
   public Proyectil() {
     this.velocidad = 300;
   }
-
   abstract  public void display();
   abstract public void mover();
 }
