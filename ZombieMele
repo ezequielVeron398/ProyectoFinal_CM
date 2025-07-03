@@ -1,5 +1,4 @@
 class ZombieMele extends Enemigo {
-  private float ancho, alto;
   private int colliderZombie, cooldownDañoMele, tiempoUltimoDañoMele, vida;
   private Sprite sprite;
 
@@ -7,16 +6,14 @@ class ZombieMele extends Enemigo {
     this.posicion = new PVector( random(width), random(height));
     this.velocidad = 100;
     this.vida = 10;
-    this.ancho = 30;
-    this.alto = 30;
     this.colliderZombie = 10;
     this.sprite = new Sprite();
     this.cooldownDañoMele = 2000;
     this.tiempoUltimoDañoMele = 0;
   }
 
-  public void mover(PVector posJugador, float deltaTime) {
-    Utilidad.movimientoEnemigo(this.posicion, posJugador, this.velocidad, 25, deltaTime);
+  public void mover(PVector posJugador) {
+    Utilidad.movimientoEnemigo(this.posicion, posJugador, this.velocidad, 25);
   }
 
   public void display() {
@@ -27,12 +24,7 @@ class ZombieMele extends Enemigo {
   public PVector getPosicion() {
     return posicion;
   }
-  public float getAncho() {
-    return ancho;
-  }
-  public float getAlto() {
-    return alto;
-  }
+ 
 
   public int getRadioColision() {
     return this.colliderZombie;
