@@ -18,12 +18,11 @@ class ZombieJefe extends Enemigo {
     this.sprite = new Sprite();
   }
 
-  public void mover(PVector posJugador, float deltaTime) {
-    Utilidad.movimientoEnemigo(this.posicion, posJugador, this.velocidad, 0, deltaTime);
+  public void mover(PVector posJugador) {
+    Utilidad.movimientoEnemigo(this.posicion, posJugador, this.velocidad, 0);
   }
 
   public void display() {
-
     sprite.displayEnemigo(this.estadoEnemigo, this.posicion);
   }
   public void disparar() {
@@ -68,5 +67,8 @@ class ZombieJefe extends Enemigo {
   }
   public void setTiempoUltimoDañoJefe(int tiempo) {
     this.tiempoUltimoDañoJefe = tiempo;
+  }
+  public ArrayList<Proyectil> getBalasVomito() {
+    return this.balasVomito;
   }
 }
