@@ -20,7 +20,7 @@ class BalaJugador extends Proyectil {
   public void display() {
     imageMode(CENTER);
     image(this.bala.get(this.xFrame, this.yFrame, this.anchoFrame, this.altoFrame), this.posicion.x, this.posicion.y);
-    xFrameFloat +=velocidadFrame*deltaTime; //se ogliba el tiempo entre Frame
+    xFrameFloat +=velocidadFrame*GameTime.deltaTime; //se ogliba el tiempo entre Frame
     if (this.xFrameFloat >= this.nextxFrameFloat) {
       this.xFrame += this.anchoFrame;
       this.xFrameFloat = 0;
@@ -32,7 +32,7 @@ class BalaJugador extends Proyectil {
   }
 
   public void mover() {
-    this.posicion.x += this.direccion.x*this.velocidad*deltaTime;
-    this.posicion.y += this.direccion.y*this.velocidad*deltaTime;
+    this.posicion.x += this.direccion.x*this.velocidad*GameTime.deltaTime;
+    this.posicion.y += this.direccion.y*this.velocidad*GameTime.deltaTime;
   }
 }
