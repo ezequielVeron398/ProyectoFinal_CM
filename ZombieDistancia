@@ -15,8 +15,8 @@ class ZombieDistancia extends Enemigo {
     this.tiempoEntreBala = 0;
   }
 
-  public void mover(PVector posJugador, float deltaTime) {
-    Utilidad.movimientoEnemigo(this.posicion, posJugador, this.velocidad, 400, deltaTime);
+  public void mover(PVector posJugador) {
+    Utilidad.movimientoEnemigo(this.posicion, posJugador, this.velocidad, 400);
   }
 
   public void display() {
