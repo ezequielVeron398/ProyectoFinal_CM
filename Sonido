@@ -1,0 +1,61 @@
+import ddf.minim.*;
+
+public static class AudioManager {
+  static Minim minim;
+  static AudioPlayer musicaFondo;
+  static AudioPlayer sonidoDisparo;
+  static AudioPlayer sonidoDaño;
+  static AudioPlayer sonidoGameOver;
+  static AudioPlayer sonidoMenu;
+
+  public static void cargarSonidos(PApplet app) {
+    minim = new Minim(app);
+    musicaFondo = minim.loadFile("musica.mp3");
+    sonidoDisparo = minim.loadFile("disparo.mp3");
+    sonidoDaño = minim.loadFile("daño.mp3");
+    sonidoGameOver = minim.loadFile("gameover.mp3");
+    sonidoMenu = minim.loadFile("menu.mp3");
+  }
+
+  public static void reproducirMenu() {
+    if (!sonidoMenu.isPlaying()) {
+      sonidoMenu.loop();
+    }
+  }
+
+  public static void detenerMenu() {
+    if (sonidoMenu.isPlaying()) {
+      sonidoMenu.pause();
+      sonidoMenu.rewind();
+    }
+  }
+
+  public static void reproducirMusica() {
+    if (!musicaFondo.isPlaying()) {
+      musicaFondo.loop();
+    }
+  }
+
+  public static void detenerMusica() {
+    if (musicaFondo.isPlaying()) {
+      musicaFondo.pause();
+      musicaFondo.rewind();
+    }
+  }
+
+  public static void dispararSonido() {
+    sonidoDisparo.rewind();
+    sonidoDisparo.setGain(-22);
+    sonidoDisparo.play();
+  }
+
+  public static void dañoSonido() {
+    sonidoDaño.rewind();
+    sonidoDaño.play();
+  }
+
+  public static void gameOverSonido() {
+    sonidoGameOver.rewind();
+    sonidoGameOver.play();
+  }
+}
