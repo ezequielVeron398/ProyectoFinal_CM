@@ -1,20 +1,39 @@
 private Player player;
+private Interfaz interfaz;
+private PImage fondoMenu, boton_1, boton_2, nombre_inicio, nivel_1, nivel_2;
 private ZombieJefe zombieJefe;
 private ArrayList<ZombieMele> zomiesMele;
 private ArrayList<ZombieDistancia> zombiesDistancia;
 private boolean w, s, d, a;
 private int tiempoInicio;
-private float deltaTime;
 private int estadoActual = MaquinaEstados.MENU;
+private int anteriorTime = 0;
+private int contador = 0;
+private boolean disparo = true;
+private int cD =0;
 private PFont fuente;
 
+
 public void setup() {
-  size(1024, 620);
+  size(1024, 682);
   fuente = createFont("Bahnschrift", 32);
+  fondoMenu = loadImage("menu_fondo.png");
+  boton_1 = loadImage("boton1.png");
+  boton_2 = loadImage("boton2.png");
+  nombre_inicio = loadImage("nombre_inicio.png");
+  nivel_1 = loadImage("piso_nivel1.png");
+  nivel_2 = loadImage("piso_nivel2.png");
+  AudioManager.cargarSonidos(this);
+  AudioManager.reproducirMenu();
+  interfaz = new Interfaz(100);
 }
 
 public void draw() {
-  background(50);
+  image(fondoMenu, 0, 0, width, height);
+  int tiempoActual = millis();
+  GameTime.update(tiempoActual, tiempoInicio);
+  tiempoInicio = tiempoActual;
+
   switch (estadoActual) {
   case MaquinaEstados.MENU:
     mostrarMenu();
@@ -29,9 +48,19 @@ public void draw() {
   case MaquinaEstados.OPCIONES:
     mostrarOpciones();
     break;
+  case MaquinaEstados.WIN:
+    mostrarWin();
+    break;
   case MaquinaEstados.GAME_OVER:
     mostrarGameOver();
     break;
+  }
+  if (disparo==false) {
+
+    if (millis()-cD>=1500) {
+      disparo = true;
+      cD = millis();
+    }
   }
 }
 public void mousePressed() {
@@ -48,9 +77,15 @@ public void mousePressed() {
   }
 
   if (estadoActual == MaquinaEstados.NIVEL_1 || estadoActual == MaquinaEstados.NIVEL_2) {
-    player.recargarBalas();
+    if (disparo) {
+      player.recargarBalas();
+      AudioManager.dispararSonido();
+      disparo = false;
+    }
   }
-  if (estadoActual == MaquinaEstados.GAME_OVER) {
+  if (estadoActual == MaquinaEstados.GAME_OVER || estadoActual == MaquinaEstados.WIN) {
+    AudioManager.detenerMusica();
+    AudioManager.reproducirMenu();
     estadoActual = MaquinaEstados.MENU;
   }
 }
@@ -82,23 +117,17 @@ public void keyReleased() {
 }
 
 public void mostrarMenu() {
-  textFont(fuente);
-  fill(255);
-  textAlign(CENTER, CENTER);
-  text("CARGA MORTAL DEMO", width/2, height/4);
-  rectMode(CENTER);
-  fill(255, 0, 0);
-  rect(width/2, height/2, 200, 60);
-  fill(255);
-  text("Iniciar Juego", width/2, height/2);
-  fill(50, 100, 200);
-  rect(width/2, height/2 + 100, 200, 60);
-  fill(255);
-  text("Opciones", width/2, height/2 + 100);
+  image(fondoMenu, 0, 0, width, height);
+  imageMode(CORNER);
+  image(nombre_inicio, 112, 112, 800, 74);
+  image(boton_1, 412, 312, 200, 60);
+  image(boton_2, 412, 412, 200, 60);
+  contador =  0;
 }
 
 public void mostrarOpciones() {
-  background(40);
+  image(fondoMenu, 0, 0, width, height);
+  imageMode(CORNER);
   textFont(fuente);
   fill(255);
   textAlign(CENTER, CENTER);
@@ -108,26 +137,38 @@ public void mostrarOpciones() {
 }
 
 public void iniciarJuego() {
+  AudioManager.detenerMenu();
+  AudioManager.reproducirMusica();
   estadoActual = MaquinaEstados.NIVEL_1;
-
   player = new Player();
   zombiesDistancia = new ArrayList<ZombieDistancia>();
   zomiesMele = new ArrayList<ZombieMele>();
   tiempoInicio = millis();
-
-  for (int i = 0; i < 1; i++) {
-    zombiesDistancia.add(new ZombieDistancia());
-    zomiesMele.add(new ZombieMele());
-  }
 }
 public void ejecutarNivel1() {
-  background(100, 200, 100);
+  imageMode(CENTER);
+  image(nivel_1, width / 2, height / 2);
 
-  int tiempoActual = millis();
-  deltaTime = (tiempoActual - tiempoInicio) / 1000.0;
-  tiempoInicio = tiempoActual;
+  //imageMode(CORNER);
+  if (contador == 0) {
+
+    zombiesDistancia.add(new ZombieDistancia());
+    zomiesMele.add(new ZombieMele());
+    contador++;
+  }
+
+  if (millis() - anteriorTime >= 2000 && contador < 5) {
+
+    zombiesDistancia.add(new ZombieDistancia());
+    zomiesMele.add(new ZombieMele());
+    anteriorTime = millis();
+    contador++;
+  }
+
+
 
   player.display();
+  interfaz.dibujarBarraVida(this, player.getVidaPlayer(), 20, 20);
   player.usaArma();
   player.mover(w, s, a, d);
   player.recibioDañoDistancia();
@@ -136,7 +177,7 @@ public void ejecutarNivel1() {
   for (int i = 0; i < zombiesDistancia.size(); i++) {
 
     zombiesDistancia.get(i).display();
-    zombiesDistancia.get(i).mover(player.getPosicionPlayer(), deltaTime);
+    zombiesDistancia.get(i).mover(player.getPosicionPlayer());
     zombiesDistancia.get(i).disparar();
     player.colisionarJugadorBala(zombiesDistancia.get(i).getBalasVomito());
   }
@@ -144,11 +185,13 @@ public void ejecutarNivel1() {
   for (int i = 0; i < zomiesMele.size(); i++) {
 
     zomiesMele.get(i).display();
-    zomiesMele.get(i).mover(player.getPosicionPlayer(), deltaTime);
+    zomiesMele.get(i).mover(player.getPosicionPlayer());
     player.recibioDañoMele(zomiesMele.get(i));
   }
 
   if (player.getVidaPlayer() <= 0) {
+    AudioManager.detenerMusica();
+    AudioManager.gameOverSonido();
     estadoActual = MaquinaEstados.GAME_OVER;
   }
 
@@ -175,13 +218,13 @@ public void iniciarNivel2() {
   println("¡Comienza el Nivel 2!");
 }
 public void ejecutarNivel2() {
-  background(50, 100, 150);
+  imageMode(CENTER);
+  image(nivel_2, width / 2, height / 2);
 
-  int tiempoActual = millis();
-  deltaTime = (tiempoActual - tiempoInicio) / 1000.0;
-  tiempoInicio = tiempoActual;
+
 
   player.display();
+  interfaz.dibujarBarraVida(this, player.getVidaPlayer(), 20, 20);
   player.usaArma();
   player.mover(w, s, a, d);
   player.recibioDañoDistancia();
@@ -189,16 +232,17 @@ public void ejecutarNivel2() {
 
   if (zombieJefe.getVida() >=0) {
     zombieJefe.display();
-    zombieJefe.mover(player.getPosicionPlayer(), deltaTime);
+    zombieJefe.mover(player.getPosicionPlayer());
     zombieJefe.disparar();
-    //player.recibioDañoJefe(zombieJefe);
-    //player.recibioDañoDistanciaJefe();
+    player.colisionarJugadorBala(zombieJefe.getBalasVomito());
+    player.recibioDañoJefe(zombieJefe);
+    player.recibioDañoDistanciaJefe();
   }
 
   for (int i = 0; i < zombiesDistancia.size(); i++) {
 
     zombiesDistancia.get(i).display();
-    zombiesDistancia.get(i).mover(player.getPosicionPlayer(), deltaTime);
+    zombiesDistancia.get(i).mover(player.getPosicionPlayer());
     zombiesDistancia.get(i).disparar();
     player.colisionarJugadorBala(zombiesDistancia.get(i).getBalasVomito());
   }
@@ -206,21 +250,23 @@ public void ejecutarNivel2() {
   for (int i = 0; i < zomiesMele.size(); i++) {
 
     zomiesMele.get(i).display();
-    zomiesMele.get(i).mover(player.getPosicionPlayer(), deltaTime);
+    zomiesMele.get(i).mover(player.getPosicionPlayer());
     player.recibioDañoMele(zomiesMele.get(i));
   }
 
 
-  if (player.getVidaPlayer() <= 0) {
+  if (player.getVidaPlayer() <= 0 ) {
+    AudioManager.detenerMusica();
     estadoActual = MaquinaEstados.GAME_OVER;
+    AudioManager.gameOverSonido();
   }
 
-  if (zombiesDistancia.size() == 0 && zomiesMele.size() == 0 && zombieJefe == null) {
+  if (zombieJefe.getVida() <= 0) {
     println("¡Ganaste el juego!");
-    estadoActual = MaquinaEstados.MENU;
+    estadoActual = MaquinaEstados.WIN;
+    AudioManager.detenerMusica();
   }
 }
-
 
 public void mostrarGameOver() {
   background(0);
@@ -228,8 +274,22 @@ public void mostrarGameOver() {
   textFont(fuente);
   textAlign(CENTER);
   text("GAME OVER", width/2, height/2-100);
-  text("PERDISTE POR PT", width/2, height/2-40);
+  text("PERDISTE CRACK", width/2, height/2-40);
   fill(255);
   textSize(20);
   text("Haz click para volver al menu", width/2, height/2+220);
+  AudioManager.detenerMusica();
+}
+
+public void mostrarWin() {
+  background(0);
+  fill(255, 0, 0);
+  textFont(fuente);
+  textAlign(CENTER);
+  text("YOU WIN!", width/2, height/2-100);
+  text("Ganaste Crack", width/2, height/2-40);
+  fill(255);
+  textSize(20);
+  text("Haz click para volver al menu", width/2, height/2+220);
+  AudioManager.detenerMusica();
 }
