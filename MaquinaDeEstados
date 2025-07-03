@@ -1,0 +1,11 @@
+static class MaquinaEstados{
+  public static final int MENU = 0;
+  public static final int NIVEL_1 = 2;
+  public static final int NIVEL_2 = 3;
+  public static final int OPCIONES = 4;
+  public static final int WIN = 5;
+  public static final int GAME_OVER = 6;
+  
+
+
+}
