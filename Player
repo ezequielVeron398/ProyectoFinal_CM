@@ -6,6 +6,7 @@ class Player extends GameObject {
   private float vidaJugador;
   private boolean dañoAJugador;
 
+
   public Player() {
     this.posicion = new PVector(width/2, height/2);
     this.velocidad = 100;
@@ -15,6 +16,7 @@ class Player extends GameObject {
     this.radioCollider = 12;
     this.vidaJugador = 100;
     this.dañoAJugador = false;
+    
   }
   public PVector getPosicionPlayer() {
     return this.posicion;
@@ -35,24 +37,26 @@ class Player extends GameObject {
 
   public void mover(boolean arriba, boolean abajo, boolean izquierda, boolean derecha) {
     if (arriba) {
-      this.posicion.y -= velocidad*deltaTime;
+      this.posicion.y -= velocidad*GameTime.deltaTime;
       this.estado = 'w';
     }
     if (abajo) {
-      this.posicion.y += velocidad*deltaTime;
+      this.posicion.y += velocidad*GameTime.deltaTime;
       this.estado = 's';
     }
     if (izquierda) {
-      this.posicion.x -= velocidad*deltaTime;
+      this.posicion.x -= velocidad*GameTime.deltaTime;
       this.estado = 'a';
     }
     if (derecha) {
-      this.posicion.x += velocidad*deltaTime;
+      this.posicion.x += velocidad*GameTime.deltaTime;
       this.estado = 'd';
     }
     if (!arriba && !abajo && !izquierda && !derecha) {
       this.estado = 'q';
     }
+    this.posicion.x = max(15, min(this.posicion.x, (width+15) - sprite.getAnchoFrameJugador()));
+    this.posicion.y = max(15, min(this.posicion.y, (height+15) - sprite.getAltoFrameJugador()));
   }
 
   public void colisionarJugadorBala(ArrayList<Proyectil> balasVomito) {
@@ -106,8 +110,12 @@ class Player extends GameObject {
       this.vidaJugador -= Utilidad.DAÑO_VOMITO;
       this.dañoAJugador = false;
       if (vidaJugador == 0);
+      AudioManager.dañoSonido();
     }
+    
   }
+  
+  
   public void recibioDañoMele(ZombieMele zombieMele) {
     int ahora = millis();
     int ultimo = zombieMele.getTiempoUltimoDañoMele();
@@ -121,11 +129,11 @@ class Player extends GameObject {
       sprite.getAltoFrameEnemigo()
       ) && ahora - ultimo > zombieMele.getCooldownDañoMele()) {
       this.vidaJugador -= Utilidad.DAÑO_MELE;
-      zombieMele.setTiempoUltimoDañoMele(ahora); 
+      zombieMele.setTiempoUltimoDañoMele(ahora);
+      AudioManager.dañoSonido();
     }
   }
-  
-/*   public void recibioDañoJefe(ZombieJefe zombieJefe) {
+  public void recibioDañoJefe(ZombieJefe zombieJefe) {
     int ahora = millis();
     int ultimo = zombieJefe.getTiempoUltimoDañoJefe();
 
@@ -138,15 +146,15 @@ class Player extends GameObject {
       sprite.getAltoFrameEnemigo()
       ) && ahora - ultimo > zombieJefe.getCooldownDañoJefe()) {
       this.vidaJugador -= Utilidad.DAÑO_JEFE;
-      zombieJefe.setTiempoUltimoDañoJefe(ahora); 
+      zombieJefe.setTiempoUltimoDañoJefe(ahora);
     }
   }
-    public void recibioDañoDistanciaJefe() {
+  public void recibioDañoDistanciaJefe() {
     if (dañoAJugador) {
-
       this.vidaJugador -= Utilidad.DAÑO_JEFE;
       this.dañoAJugador = false;
       if (vidaJugador == 0);
+      AudioManager.dañoSonido();
     }
-}*/
+  }
 }
