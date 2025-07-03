@@ -1,0 +1,21 @@
+class Interfaz {
+  private float vidaMaxima;
+  Interfaz(float vidaMaxima) {
+    this.vidaMaxima = vidaMaxima;
+  }
+  void dibujarBarraVida(PApplet app, float vida, float x, float y) {
+    float anchoMaximo = 200;
+    float alto = 20;
+    float anchoVida = PApplet.map(vida, 0, vidaMaxima, 0, anchoMaximo);
+    app.fill(100);
+    app.rect(x, y, anchoMaximo, alto);
+    if (vida > 60) app.fill(0, 255, 0);
+    else if (vida > 30) app.fill(255, 165, 0);
+    else app.fill(255, 0, 0);
+    app.rect(x, y, anchoVida, alto);
+    app.fill(255);
+    app.textSize(22);
+    app.textAlign(PApplet.LEFT, PApplet.CENTER);
+    app.text("HP: " + (int)vida + " / " + (int)vidaMaxima, x, y - 10);
+  }
+}
