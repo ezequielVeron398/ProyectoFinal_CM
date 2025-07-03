@@ -7,8 +7,8 @@ class BalaVomito extends Proyectil {
     this.colliderVomito = 5;
   }
   public void mover() {
-    this.posicion.x += this.direccion.x*this.velocidad*deltaTime;
-    this.posicion.y += this.direccion.y*this.velocidad*deltaTime;
+    this.posicion.x += this.direccion.x*this.velocidad*GameTime.deltaTime;
+    this.posicion.y += this.direccion.y*this.velocidad*GameTime.deltaTime;
   }
   public void display() {
     fill(0, 255, 0);
